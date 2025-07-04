@@ -18,7 +18,7 @@ e este projeto adere ao [Versionamento Semântico](https://semver.org/spec/v2.0.
 
 #### ✅ Templates PostgreSQL Otimizados (NOVA FUNCIONALIDADE)
 - Templates especializados na pasta `templates_postgresql/`
-- Integração com provider `db/postgresql` da isis-golang-lib
+- Integração com provider `db/postgresql` da nexs-lib
 - Suporte a operações transacionais e em lote
 - Métodos avançados nas entidades (TableName, Clone, Validate, etc.)
 - Soft delete quando aplicável

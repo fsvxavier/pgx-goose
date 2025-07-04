@@ -44,7 +44,7 @@ go install github.com/fsvxavier/pgx-goose@latest
 ### Compilación local
 
 ```bash
-git clone https://github.com/fsvxavier/isis-golang-lib.git
+git clone https://github.com/fsvxavier/nexs-lib.git
 cd pgx-goose
 go build -o pgx-goose .
 ./pgx-goose --help
@@ -313,7 +313,7 @@ tests/
 - Compatibilidad básica con pgx
 
 #### 2. Plantillas PostgreSQL (`./templates_postgresql/`)
-- **Recomendadas** - Optimizadas para `isis-golang-lib`
+- **Recomendadas** - Optimizadas para `nexs-lib`
 - Soporte para transacciones y operaciones por lotes
 - Métodos avanzados de struct
 
@@ -521,7 +521,7 @@ import (
     "context"
     "your-project/internal/domain"
     "your-project/internal/adapters/postgres"
-    "github.com/fsvxavier/isis-golang-lib/db/postgresql"
+    "github.com/fsvxavier/nexs-lib/db/postgresql"
 )
 
 func main() {
@@ -585,7 +585,7 @@ func TestUserService_CreateUser(t *testing.T) {
 
 ```bash
 # Clonar y configurar
-git clone https://github.com/fsvxavier/isis-golang-lib.git
+git clone https://github.com/fsvxavier/nexs-lib.git
 cd pgx-goose
 go mod download
 
@@ -634,8 +634,8 @@ Licenciado bajo la [Licencia MIT](LICENSE).
 
 ## 📞 Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/fsvxavier/isis-golang-lib/issues)
-- **Discusiones**: [GitHub Discussions](https://github.com/fsvxavier/isis-golang-lib/discussions)
+- **Issues**: [GitHub Issues](https://github.com/fsvxavier/nexs-lib/issues)
+- **Discusiones**: [GitHub Discussions](https://github.com/fsvxavier/nexs-lib/discussions)
 
 ---
 

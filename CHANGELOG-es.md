@@ -18,7 +18,7 @@ y este proyecto se adhiere al [Versionado Semántico](https://semver.org/spec/v2
 
 #### ✅ Templates PostgreSQL Optimizados (NUEVA FUNCIONALIDAD)
 - Templates especializados en carpeta `templates_postgresql/`
-- Integración con proveedor `db/postgresql` de isis-golang-lib
+- Integración con proveedor `db/postgresql` de nexs-lib
 - Soporte para operaciones transaccionales y por lotes
 - Métodos avanzados en entidades (TableName, Clone, Validate, etc.)
 - Eliminación lógica cuando aplica
