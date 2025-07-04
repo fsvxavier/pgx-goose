@@ -1,83 +1,83 @@
 # Changelog
 
-Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
+All notable changes to this project will be documented in this file.
 
-O formato é baseado em [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [1.0.0] - 2025-01-03
 
-### 🎯 Funcionalidades Principais Implementadas
+### 🎯 Main Features Implemented
 
-#### ✅ Diretórios de Saída Configuráveis (NOVA FUNCIONALIDADE)
-- Adicionada configuração `output_dirs` para diretórios separados
-- Suporte a flags CLI específicas (`--models-dir`, `--interfaces-dir`, etc.)
-- Retrocompatibilidade com configuração `OutputDir` legacy
-- Precedência: CLI flags > config file > defaults
-- Suporte a 5 arquiteturas diferentes (Hexagonal, Clean, DDD, Modular, Monorepo)
+#### ✅ Configurable Output Directories (NEW FEATURE)
+- Added `output_dirs` configuration for separate directories
+- Support for specific CLI flags (`--models-dir`, `--interfaces-dir`, etc.)
+- Backward compatibility with legacy `OutputDir` configuration
+- Precedence: CLI flags > config file > defaults
+- Support for 5 different architectures (Hexagonal, Clean, DDD, Modular, Monorepo)
 
-#### ✅ Templates PostgreSQL Otimizados (NOVA FUNCIONALIDADE)
-- Templates especializados na pasta `templates_postgresql/`
-- Integração com provider `db/postgresql` da isis-golang-lib
-- Suporte a operações transacionais e em lote
-- Métodos avançados nas entidades (TableName, Clone, Validate, etc.)
-- Soft delete quando aplicável
+#### ✅ Optimized PostgreSQL Templates (NEW FEATURE)
+- Specialized templates in `templates_postgresql/` folder
+- Integration with `db/postgresql` provider from isis-golang-lib
+- Support for transactional and batch operations
+- Advanced methods in entities (TableName, Clone, Validate, etc.)
+- Soft delete when applicable
 
-#### ✅ Documentação Unificada (NOVA FUNCIONALIDADE)
-- README.md completo com ~1.315 linhas
-- 17 seções principais com 15+ exemplos completos
-- Integração de 6 arquivos de documentação
-- Índice detalhado para navegação
-- Casos de uso por arquitetura
+#### ✅ Unified Documentation (NEW FEATURE)
+- Complete README.md with ~1,315 lines
+- 17 main sections with 15+ complete examples
+- Integration of 6 documentation files
+- Detailed index for navigation
+- Use cases by architecture
 
-### Adicionado
+### Added
 
 #### Core Features
-- ✅ Ferramenta CLI completa baseada em Cobra
-- ✅ Introspecção completa de schemas PostgreSQL
-- ✅ Geração automática de structs Go a partir de tabelas
-- ✅ Geração de interfaces de repositórios com CRUD completo
-- ✅ Implementações PostgreSQL usando pgx/v5
-- ✅ Suporte a dois providers de mock: testify e gomock
-- ✅ Geração automática de testes unitários
-- ✅ Sistema de templates customizáveis usando Go Templates
+- ✅ Complete CLI tool based on Cobra
+- ✅ Complete PostgreSQL schema introspection
+- ✅ Automatic Go struct generation from tables
+- ✅ Repository interface generation with complete CRUD
+- ✅ PostgreSQL implementations using pgx/v5
+- ✅ Support for two mock providers: testify and gomock
+- ✅ Automatic unit test generation
+- ✅ Customizable template system using Go Templates
 
 #### Configuration & CLI
-- ✅ Suporte a arquivos de configuração YAML e JSON
-- ✅ Flags de linha de comando abrangentes
-- ✅ Sistema de logging configurável (debug, verbose, info, warn, error)
-- ✅ Validação de configuração robusta
+- ✅ Support for YAML and JSON configuration files
+- ✅ Comprehensive command line flags
+- ✅ Configurable logging system (debug, verbose, info, warn, error)
+- ✅ Robust configuration validation
 
 #### Database Support
-- ✅ Introspecção completa de tabelas, colunas, tipos
-- ✅ Suporte a chaves primárias, índices e chaves estrangeiras
-- ✅ Mapeamento automático de tipos PostgreSQL → Go
-- ✅ Suporte a tipos nullable com ponteiros
-- ✅ Comentários de tabelas e colunas preservados
+- ✅ Complete introspection of tables, columns, types
+- ✅ Support for primary keys, indexes, and foreign keys
+- ✅ Automatic PostgreSQL → Go type mapping
+- ✅ Support for nullable types with pointers
+- ✅ Preserved table and column comments
 
 #### Code Generation
-- ✅ Templates embutidos para todos os tipos de arquivo
-- ✅ Estrutura de projeto organizada e idiomática
-- ✅ Suporte a templates personalizados via diretório customizado
-- ✅ Geração de código limpo seguindo convenções Go
-- ✅ Suporte a relacionamentos entre tabelas
+- ✅ Embedded templates for all file types
+- ✅ Organized and idiomatic project structure
+- ✅ Support for custom templates via custom directory
+- ✅ Clean code generation following Go conventions
+- ✅ Support for relationships between tables
 
 #### Testing & Quality
-- ✅ Testes unitários abrangentes
-- ✅ Mocks automáticos para todas as interfaces
-- ✅ Testes gerados com cenários de sucesso e erro
-- ✅ Integração com testify/assert e testify/mock
-- ✅ Suporte a gomock para projetos que preferem
+- ✅ Comprehensive unit tests
+- ✅ Automatic mocks for all interfaces
+- ✅ Generated tests with success and error scenarios
+- ✅ Integration with testify/assert and testify/mock
+- ✅ Support for gomock for projects that prefer it
 
-### Características Técnicas
+### Technical Features
 
-#### Arquitetura
-- Clean Architecture com separação de responsabilidades
-- Design orientado a interfaces
-- Injeção de dependências
-- Estrutura modular e extensível
+#### Architecture
+- Clean Architecture with separation of concerns
+- Interface-oriented design
+- Dependency injection
+- Modular and extensible structure
 
-#### Tipos Suportados
+#### Supported Types
 | PostgreSQL | Go |
 |------------|-----|
 | integer, int, int4 | int |
@@ -93,96 +93,96 @@ e este projeto adere ao [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 | json, jsonb | json.RawMessage |
 | bytea | []byte |
 
-#### Estrutura de Projeto Gerada
+#### Generated Project Structure
 ```
 output_dir/
-├── models/                     # Structs das tabelas
+├── models/                     # Table structs
 ├── repository/
-│   ├── interfaces/             # Interfaces dos repositórios
-│   └── postgres/               # Implementações PostgreSQL
-├── mocks/                      # Mocks para testes
-└── tests/                      # Testes unitários
+│   ├── interfaces/             # Repository interfaces
+│   └── postgres/               # PostgreSQL implementations
+├── mocks/                      # Mocks for testing
+└── tests/                      # Unit tests
 ```
 
-#### Flags CLI Disponíveis
-- `--dsn`: String de conexão PostgreSQL
-- `--out`: Diretório de saída
-- `--tables`: Lista de tabelas específicas
-- `--config`: Arquivo de configuração
-- `--template-dir`: Templates customizados
-- `--mock-provider`: Provider de mocks (testify/mock)
-- `--with-tests`: Geração de testes
-- `--verbose`: Logging verboso
-- `--debug`: Logging de debug
+#### Available CLI Flags
+- `--dsn`: PostgreSQL connection string
+- `--out`: Output directory
+- `--tables`: List of specific tables
+- `--config`: Configuration file
+- `--template-dir`: Custom templates
+- `--mock-provider`: Mock provider (testify/mock)
+- `--with-tests`: Test generation
+- `--verbose`: Verbose logging
+- `--debug`: Debug logging
 
-### Arquivos de Projeto
+### Project Files
 
-#### Documentação
-- ✅ README.md completo com exemplos
-- ✅ EXAMPLES.md com casos de uso detalhados
-- ✅ Templates de configuração (YAML/JSON)
-- ✅ Scripts de demonstração (Bash/PowerShell)
+#### Documentation
+- ✅ Complete README.md with examples
+- ✅ EXAMPLES.md with detailed use cases
+- ✅ Configuration templates (YAML/JSON)
+- ✅ Demo scripts (Bash/PowerShell)
 
 #### Build & Development
-- ✅ Makefile com targets úteis
-- ✅ go.mod com todas as dependências
-- ✅ .gitignore apropriado
-- ✅ Licença MIT
+- ✅ Makefile with useful targets
+- ✅ go.mod with all dependencies
+- ✅ Appropriate .gitignore
+- ✅ MIT License
 
 #### Scripts & Tools
-- ✅ demo.sh para Linux/macOS
-- ✅ demo.ps1 para Windows
-- ✅ Schema SQL de exemplo
-- ✅ Configurações de exemplo
+- ✅ demo.sh for Linux/macOS
+- ✅ demo.ps1 for Windows
+- ✅ Example SQL schema
+- ✅ Example configurations
 
-### Dependências
+### Dependencies
 
 #### Runtime
-- `github.com/jackc/pgx/v5` - Driver PostgreSQL
-- `github.com/spf13/cobra` - Framework CLI
+- `github.com/jackc/pgx/v5` - PostgreSQL driver
+- `github.com/spf13/cobra` - CLI framework
 - `log/slog` - Structured logging (native Go 1.21+)
-- `gopkg.in/yaml.v3` - Parser YAML
+- `gopkg.in/yaml.v3` - YAML parser
 
 #### Testing & Mocking
-- `github.com/stretchr/testify` - Framework de testes
-- `go.uber.org/mock` - Gomock para mocks
-- `github.com/google/uuid` - Suporte a UUID
-- `github.com/shopspring/decimal` - Tipos decimais
+- `github.com/stretchr/testify` - Testing framework
+- `go.uber.org/mock` - Gomock for mocks
+- `github.com/google/uuid` - UUID support
+- `github.com/shopspring/decimal` - Decimal types
 
-### Notas de Uso
+### Usage Notes
 
-#### Instalação
+#### Installation
 ```bash
 go install github.com/fsvxavier/pgx-goose@latest
 ```
 
-#### Uso Básico
+#### Basic Usage
 ```bash
 pgx-goose --dsn "postgres://user:pass@localhost:5432/db" --out ./generated
 ```
 
-#### Com Configuração
+#### With Configuration
 ```bash
 pgx-goose --config pgx-goose-conf.yaml --verbose
 ```
 
-### Agradecimentos
+### Acknowledgments
 
-Este projeto foi inspirado por:
+This project was inspired by:
 - [xo/dbtpl](https://github.com/xo/dbtpl)
 - [go-gorm/gen](https://github.com/go-gorm/gen)
-- Princípios de Clean Architecture
-- Padrões SOLID e DDD
+- Clean Architecture principles
+- SOLID and DDD patterns
 
-### Contribuindo
+### Contributing
 
-Para contribuir com o projeto:
-1. Fork o repositório
-2. Crie uma branch para sua feature
-3. Implemente com testes
-4. Execute os testes e linting
-5. Submeta um Pull Request
+To contribute to the project:
+1. Fork the repository
+2. Create a branch for your feature
+3. Implement with tests
+4. Run tests and linting
+5. Submit a Pull Request
 
-### Licença
+### License
 
-MIT License - veja [LICENSE](LICENSE) para detalhes.
+MIT License - see [LICENSE](LICENSE) for details.
