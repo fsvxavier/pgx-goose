@@ -1,6 +1,6 @@
-# pgx-goose Quick Reference
+# PGX-Goose Quick Reference
 
-Quick reference guide for the most common pgx-goose commands and configurations.
+Quick reference guide for the most common PGX-Goose commands and configurations.
 
 ## Quick Commands
 

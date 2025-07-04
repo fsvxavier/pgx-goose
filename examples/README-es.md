@@ -1,6 +1,6 @@
-# Ejemplos de Configuración pgx-goose
+# Ejemplos de Configuración PGX-Goose
 
-Esta carpeta contiene diferentes archivos de ejemplo de configuración para pgx-goose, demostrando varios enfoques y escenarios de uso.
+Esta carpeta contiene diferentes archivos de ejemplo de configuración para PGX-Goose, demostrando varios enfoques y escenarios de uso.
 
 > 🇪🇸 **Versión en español (actual)** | 🇧🇷 **[Versão em português disponível](README-pt-br.md)** | 🇺🇸 **[English version available](README.md)**
 

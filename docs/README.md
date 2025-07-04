@@ -1,6 +1,6 @@
-# pgx-goose Documentation
+# PGX-Goose Documentation
 
-This directory contains comprehensive usage documentation for pgx-goose in multiple languages.
+This directory contains comprehensive usage documentation for PGX-Goose in multiple languages.
 
 ## Available Documentation
 
@@ -30,7 +30,7 @@ Choose your preferred language and follow the documentation:
 
 Each documentation file includes:
 
-- **Installation** - How to install and set up pgx-goose
+- **Installation** - How to install and set up PGX-Goose
 - **Configuration** - Configuration file formats and options
 - **Basic Usage** - Simple commands and quick start
 - **Advanced Configurations** - Environment-specific setups, microservices, custom schemas

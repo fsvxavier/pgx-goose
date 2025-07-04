@@ -1,9 +1,9 @@
-# pgx-goose
+# PGX-Goose
 
 [![Go Version](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**pgx-goose** is a PostgreSQL reverse engineering tool that automatically generates idiomatic Go code including structs, repository interfaces, implementations, mocks, and unit tests. Supports multiple schemas for complex enterprise architectures.
+**PGX-Goose** is a PostgreSQL reverse engineering tool that automatically generates idiomatic Go code including structs, repository interfaces, implementations, mocks, and unit tests. Supports multiple schemas for complex enterprise architectures.
 
 > 🇺🇸 **English version (current)** | 🇧🇷 **[Versão em português disponível](README-pt-br.md)** | 🇪🇸 **[Versión en español disponible](README-es.md)**
 
@@ -639,4 +639,4 @@ Licensed under the [MIT License](LICENSE).
 
 ---
 
-**pgx-goose** - Transforming your PostgreSQL into idiomatic Go code! 🚀
+**PGX-Goose** - Transforming your PostgreSQL into idiomatic Go code! 🚀

@@ -1,4 +1,4 @@
-# pgx-goose
+# PGX-Goose
 - [⚙️ Configuração](#️-configuração)
 - [📁 Estrutura Gerada](#-estrutura-gerada)
 - [🎨 Templates](#-templates)
@@ -8,7 +8,7 @@
 - [📚 Documentação](#-documentação)ersion](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**pgx-goose** é uma ferramenta de engenharia reversa para PostgreSQL que gera automaticamente código Go idiomático incluindo structs, interfaces de repositórios, implementações, mocks e testes unitários. Suporta múltiplos schemas para arquiteturas empresariais complexas.
+**PGX-Goose** é uma ferramenta de engenharia reversa para PostgreSQL que gera automaticamente código Go idiomático incluindo structs, interfaces de repositórios, implementações, mocks e testes unitários. Suporta múltiplos schemas para arquiteturas empresariais complexas.
 
 > 🇺🇸 **[English version available](README.md)** | 🇧🇷 **Versão em português (atual)** | 🇪🇸 **[Versión en español disponible](README-es.md)**
 
@@ -665,7 +665,7 @@ Licenciado sob a [Licença MIT](LICENSE).
 
 ---
 
-**pgx-goose** - Transformando seu PostgreSQL em código Go idiomático! 🚀
+**PGX-Goose** - Transformando seu PostgreSQL em código Go idiomático! 🚀
 
 ## 📚 Documentação
 

@@ -1,8 +1,8 @@
-# pgx-goose - Usage Documentation
+# PGX-Goose - Usage Documentation
 
 ## Overview
 
-**pgx-goose** is a powerful tool that performs reverse engineering on PostgreSQL databases to automatically generate Go source code, including structs, repository interfaces, implementations, mocks, and unit tests.
+**PGX-Goose** is a powerful tool that performs reverse engineering on PostgreSQL databases to automatically generate Go source code, including structs, repository interfaces, implementations, mocks, and unit tests.
 
 ## Table of Contents
 

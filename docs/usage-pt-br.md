@@ -1,8 +1,8 @@
-# pgx-goose - Documentação de Utilização
+# PGX-Goose - Documentação de Utilização
 
 ## Visão Geral
 
-O **pgx-goose** é uma ferramenta poderosa que realiza engenharia reversa em bancos de dados PostgreSQL para gerar automaticamente código Go, incluindo structs, interfaces de repositório, implementações, mocks e testes unitários.
+O **PGX-Goose** é uma ferramenta poderosa que realiza engenharia reversa em bancos de dados PostgreSQL para gerar automaticamente código Go, incluindo structs, interfaces de repositório, implementações, mocks e testes unitários.
 
 ## Índice
 
