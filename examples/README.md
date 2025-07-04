@@ -1,84 +1,86 @@
-# Exemplos de Configuração pgx-goose
+# pgx-goose Configuration Examples
 
-Esta pasta contém diferentes exemplos de arquivos de configuração para o pgx-goose, demonstrando várias abordagens e cenários de uso.
+This folder contains different example configuration files for pgx-goose, demonstrating various approaches and usage scenarios.
 
-## Arquivos Disponíveis
+> 🇺🇸 **English version (current)** | 🇧🇷 **[Versão em português disponível](README-pt-br.md)** | 🇪🇸 **[Versión en español disponible](README-es.md)**
 
-### Configurações Básicas
-- **`pgx-goose-conf_basic.yaml`** - Configuração simples e direta para começar rapidamente
-- **`pgx-goose-conf_basic.json`** - Mesma configuração básica em formato JSON
+## Available Files
 
-### Configurações Avançadas
-- **`pgx-goose-conf_advanced.yaml`** - Configuração completa com diretórios separados e todas as opções
-- **`pgx-goose-conf_separate_dirs.yaml`** - Foco na organização com diretórios separados por tipo
+### Basic Configurations
+- **`pgx-goose-conf_basic.yaml`** - Simple and direct configuration to get started quickly
+- **`pgx-goose-conf_basic.json`** - Same basic configuration in JSON format
 
-### Configurações por Ambiente
-- **`pgx-goose-conf_development.yaml`** - Otimizada para desenvolvimento local
-- **`pgx-goose-conf_production.yaml`** - Configuração robusta para produção
-- **`pgx-goose-conf_testing.yaml`** - Para testes automatizados e CI/CD
+### Advanced Configurations
+- **`pgx-goose-conf_advanced.yaml`** - Complete configuration with separate directories and all options
+- **`pgx-goose-conf_separate_dirs.yaml`** - Focus on organization with separate directories by type
 
-### Configurações por Arquitetura
-- **`pgx-goose-conf_microservice.yaml`** - Para projetos de microserviços
-- **`pgx-goose-conf_custom_schema.yaml`** - Para trabalhar com schemas específicos
+### Environment-Specific Configurations
+- **`pgx-goose-conf_development.yaml`** - Optimized for local development
+- **`pgx-goose-conf_production.yaml`** - Robust configuration for production
+- **`pgx-goose-conf_testing.yaml`** - For automated testing and CI/CD
 
-### Configurações por Filtragem
-- **`pgx-goose-conf_ignore_tables.yaml`** - Exemplo de como ignorar tabelas específicas
+### Architecture-Specific Configurations
+- **`pgx-goose-conf_microservice.yaml`** - For microservice projects
+- **`pgx-goose-conf_custom_schema.yaml`** - For working with specific schemas
 
-## Como Usar
+### Filtering Configurations
+- **`pgx-goose-conf_ignore_tables.yaml`** - Example of how to ignore specific tables
 
-1. **Copie** o arquivo de exemplo que melhor se adequa ao seu projeto
-2. **Renomeie** para `pgx-goose-conf.yaml` ou `pgx-goose-conf.json`
-3. **Edite** as configurações específicas do seu projeto:
-   - DSN do banco de dados
+## How to Use
+
+1. **Copy** the example file that best suits your project
+2. **Rename** to `pgx-goose-conf.yaml` or `pgx-goose-conf.json`
+3. **Edit** the specific configurations for your project:
+   - Database DSN
    - Schema
-   - Diretórios de saída
-   - Tabelas específicas ou a ignorar
+   - Output directories
+   - Specific tables or tables to ignore
 
-## Exemplos de Uso
+## Usage Examples
 
-### Uso com arquivo de configuração específico:
+### Using with specific configuration file:
 ```bash
 pgx-goose --config examples/pgx-goose-conf_basic.yaml
 ```
 
-### Uso com busca automática (renomeie o arquivo):
+### Using with automatic search (rename the file):
 ```bash
 cp examples/pgx-goose-conf_basic.yaml pgx-goose-conf.yaml
 pgx-goose
 ```
 
-## Estrutura dos Arquivos de Configuração
+## Configuration File Structure
 
-### Campos Principais:
-- **`dsn`** - String de conexão PostgreSQL
-- **`schema`** - Schema do banco a ser processado (padrão: "public")
-- **`out`** - Diretório de saída simples (legado)
-- **`output_dirs`** - Configuração detalhada de diretórios
-- **`mock_provider`** - Provider de mocks ("testify" ou "mock")
-- **`with_tests`** - Se deve gerar testes (true/false)
-- **`template_dir`** - Diretório de templates customizados (opcional)
-- **`tables`** - Lista de tabelas específicas (vazio = todas)
-- **`ignore_tables`** - Lista de tabelas a ignorar
+### Main Fields:
+- **`dsn`** - PostgreSQL connection string
+- **`schema`** - Database schema to process (default: "public")
+- **`out`** - Simple output directory (legacy)
+- **`output_dirs`** - Detailed directory configuration
+- **`mock_provider`** - Mock provider ("testify" or "mock")
+- **`with_tests`** - Whether to generate tests (true/false)
+- **`template_dir`** - Custom templates directory (optional)
+- **`tables`** - List of specific tables (empty = all)
+- **`ignore_tables`** - List of tables to ignore
 
-### Configuração de Diretórios (output_dirs):
-- **`base`** - Diretório base
-- **`models`** - Entidades/modelos
-- **`interfaces`** - Interfaces dos repositórios
-- **`repositories`** - Implementações PostgreSQL
-- **`mocks`** - Mocks para testes
-- **`tests`** - Testes de integração
+### Directory Configuration (output_dirs):
+- **`base`** - Base directory
+- **`models`** - Entities/models
+- **`interfaces`** - Repository interfaces
+- **`repositories`** - PostgreSQL implementations
+- **`mocks`** - Test mocks
+- **`tests`** - Integration tests
 
-## Dicas
+## Tips
 
-1. **Ambiente de Desenvolvimento**: Use configurações mais simples e rápidas
-2. **Produção**: Use todas as validações e testes
-3. **Microserviços**: Foque em schemas específicos
-4. **CI/CD**: Use configurações otimizadas para testes automatizados
-5. **Clean Architecture**: Organize os diretórios conforme a estrutura do seu projeto
+1. **Development Environment**: Use simpler and faster configurations
+2. **Production**: Use all validations and tests
+3. **Microservices**: Focus on specific schemas
+4. **CI/CD**: Use configurations optimized for automated testing
+5. **Clean Architecture**: Organize directories according to your project structure
 
-## Variáveis de Ambiente
+## Environment Variables
 
-Você pode usar variáveis de ambiente no DSN:
+You can use environment variables in the DSN:
 ```yaml
 dsn: "postgres://user:${DB_PASSWORD}@${DB_HOST}:5432/mydb"
 ```
