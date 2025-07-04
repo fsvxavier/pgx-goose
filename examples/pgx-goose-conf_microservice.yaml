@@ -1,0 +1,32 @@
+# Configuração para microserviços
+# Use este exemplo para projetos de microserviços com schemas específicos
+
+dsn: "postgres://user:password@localhost:5432/microservices_db?sslmode=disable"
+schema: "user_service"                     # Schema específico do microserviço
+
+# Estrutura de diretórios para microserviços
+output_dirs:
+  base: "./internal/generated"
+  models: "./internal/domain/user"         # Domain específico do serviço
+  interfaces: "./internal/ports"           # Interfaces/ports
+  repositories: "./internal/adapters/db"   # Adaptadores de banco
+  mocks: "./test/mocks"                    # Mocks para testes
+  tests: "./test/integration"              # Testes de integração
+
+# Configuração específica do serviço
+mock_provider: "testify"
+with_tests: true
+
+# Tabelas específicas do microserviço de usuários
+tables:
+  - "users"
+  - "user_profiles"
+  - "user_preferences"
+  - "user_sessions"
+
+# Ignorar tabelas compartilhadas ou de outros serviços
+ignore_tables:
+  - "product_catalog"
+  - "orders"
+  - "payments"
+  - "inventory"

@@ -1,0 +1,34 @@
+# Configuração para projetos com estrutura de diretórios separados
+# Use este exemplo para organizar o código gerado em diferentes localizações
+
+dsn: "postgres://user:password@localhost:5432/myapp?sslmode=disable"
+schema: "public"
+
+# Estrutura de diretórios separados por tipo de arquivo
+output_dirs:
+  base: "./generated"                      # Diretório base (não usado quando outros são especificados)
+  models: "./pkg/domain/entities"          # Entidades de domínio
+  interfaces: "./pkg/repository/interfaces" # Interfaces dos repositórios
+  repositories: "./internal/repository/postgres" # Implementações PostgreSQL
+  mocks: "./test/mocks/repository"         # Mocks dos repositórios
+  tests: "./test/integration/repository"   # Testes de integração
+
+# Configuração de geração
+mock_provider: "testify"                   # Usar testify/mock
+with_tests: true                           # Gerar testes unitários
+template_dir: "./templates/clean_arch"     # Templates para Clean Architecture
+
+# Processar apenas tabelas de negócio principais
+tables:
+  - "users"
+  - "products"
+  - "categories"
+  - "orders"
+  - "order_items"
+  - "customers"
+
+# Não processar tabelas auxiliares
+ignore_tables:
+  - "migrations"
+  - "audit_trails"
+  - "system_configs"

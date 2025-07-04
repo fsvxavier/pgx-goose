@@ -1,0 +1,13 @@
+{
+  "_comment": "Configuração básica em formato JSON - equivalente ao pgx-goose-conf_basic.yaml",
+  "dsn": "postgres://user:password@localhost:5432/mydb?sslmode=disable",
+  "schema": "public",
+  "out": "./generated",
+  "mock_provider": "testify",
+  "with_tests": true,
+  "tables": [],
+  "ignore_tables": [
+    "migrations",
+    "schema_versions"
+  ]
+}

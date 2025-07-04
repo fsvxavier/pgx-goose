@@ -1,0 +1,34 @@
+# Configuração para projetos com schemas customizados
+# Use este exemplo quando trabalhar com schemas específicos como billing, inventory, etc.
+
+dsn: "postgres://user:password@localhost:5432/company_db?sslmode=disable"
+schema: "billing"                          # Schema customizado
+
+# Estrutura organizacional por domínio
+output_dirs:
+  base: "./src/billing"
+  models: "./src/billing/domain/models"
+  interfaces: "./src/billing/ports/repositories"
+  repositories: "./src/billing/adapters/postgres"
+  mocks: "./src/billing/tests/mocks"
+  tests: "./src/billing/tests/integration"
+
+# Configuração para domínio de billing
+mock_provider: "mock"                      # Usar gomock
+with_tests: true
+template_dir: "./templates/billing"        # Templates específicos do domínio
+
+# Tabelas relacionadas ao billing
+tables:
+  - "invoices"
+  - "payments"
+  - "customers"
+  - "subscriptions"
+  - "payment_methods"
+
+# Ignorar tabelas de outros domínios
+ignore_tables:
+  - "users"                               # Domínio de user management
+  - "products"                            # Domínio de catalog
+  - "inventory"                           # Domínio de inventory
+  - "orders"                              # Domínio de orders

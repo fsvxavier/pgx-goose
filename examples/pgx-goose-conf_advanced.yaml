@@ -1,0 +1,27 @@
+# Configuração avançada com diretórios separados
+# Use este exemplo quando quiser ter controle total sobre a estrutura de diretórios
+
+dsn: "postgres://user:password@localhost:5432/mydb?sslmode=disable"
+schema: "public"
+
+# Configuração de diretórios de saída detalhada
+output_dirs:
+  base: "./src/generated"
+  models: "./src/domain/entities"           # Domain entities/models
+  interfaces: "./src/ports/repositories"    # Repository interfaces (ports)
+  repositories: "./src/adapters/database"   # Database implementations (adapters)
+  mocks: "./tests/mocks"                    # Mock implementations
+  tests: "./tests/integration"              # Integration tests
+
+# Opções avançadas
+template_dir: "./custom_templates"         # Diretório de templates customizados
+mock_provider: "mock"                      # Usar gomock para geração de mocks
+with_tests: true
+
+# Configuração específica de tabelas
+tables: []                                 # Vazio = processar todas as tabelas
+ignore_tables:
+  - "migrations"
+  - "schema_versions"
+  - "audit_logs"
+  - "temp_tables"

@@ -63,6 +63,6 @@ coverage.out
 *.log
 
 # Config files with sensitive data
-genpgx.local.yaml
-genpgx.local.json
+pgx-goose-conf.local.yaml
+pgx-goose-conf.local.json
 config.local.*

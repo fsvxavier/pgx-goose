@@ -1,0 +1,24 @@
+# Exemplo de configuração com diretórios separados
+dsn: "postgres://cds_master:WZtUKx0qSZ5xt1HuNLgjdEvAaL4sFC@rds-pluto-hml.c14acyec8bk4.us-east-2.rds.amazonaws.com.:5432/pluto?sslmode=disable&search_path=pluto"
+schema: "pluto"  # Custom schema - could be: inventory, billing, users, etc.
+out: "./generated"
+
+# Configuração de diretórios de saída separados
+output_dirs:
+  base: "./generated"                    # Diretório base
+  models: "./generated/src/domain/entities"        # Modelos/entidades
+  interfaces: "./generated/src/ports/repositories" # Interfaces dos repositórios  
+  repositories: "./generated/src/adapters/db"      # Implementações PostgreSQL
+  mocks: "./generated/tests/mocks"                 # Mocks para testes
+  tests: "./generated/tests/integration"           # Testes integrados
+
+# Opções de geração
+# template_dir: "./templates"    # Templates personalizados
+mock_provider: "mock"                  # Provider de mocks
+with_tests: true                          # Gerar testes
+
+# Filtrar tabelas específicas (opcional)
+tables: []  # Empty = process all tables
+ignore_tables: 
+  - "awsdms_apply_exceptions"
+

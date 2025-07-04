@@ -1,0 +1,31 @@
+# Configuração para ambiente de produção
+# Use este exemplo para configurações de produção com todas as otimizações
+
+dsn: "postgres://prod_user:${DB_PASSWORD}@prod-db:5432/myapp_prod?sslmode=require"
+schema: "public"
+
+# Estrutura de produção com organização clean
+output_dirs:
+  base: "./internal/generated"
+  models: "./internal/domain/entities"     # Domain entities
+  interfaces: "./internal/ports/repository" # Repository ports
+  repositories: "./internal/adapters/database" # Database adapters
+  mocks: "./test/mocks"                    # Test mocks
+  tests: "./test/integration"              # Integration tests
+
+# Configuração de produção
+mock_provider: "mock"                      # gomock para produção
+with_tests: true                           # Sempre gerar testes em produção
+template_dir: "./templates/production"     # Templates otimizados
+
+# Em produção, processar todas as tabelas de negócio
+tables: []                                 # Vazio = todas as tabelas
+
+# Ignorar apenas tabelas de sistema e desenvolvimento
+ignore_tables:
+  - "migrations"                           # Schema migrations
+  - "dev_*"                               # Tabelas de desenvolvimento
+  - "test_*"                              # Tabelas de teste
+  - "temp_*"                              # Tabelas temporárias
+  - "audit_logs"                          # Logs de auditoria (muito grandes)
+  - "system_logs"                         # Logs do sistema

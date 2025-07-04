@@ -1,0 +1,42 @@
+# Configuração para projetos que ignoram tabelas específicas
+# Use este exemplo quando quiser excluir certas tabelas da geração
+
+dsn: "postgres://user:password@localhost:5432/production_db?sslmode=disable"
+schema: "public"
+out: "./generated"
+
+# Configuração simples
+mock_provider: "testify"
+with_tests: true
+
+# Estratégia: processar todas as tabelas EXCETO as listadas em ignore_tables
+tables: []                                 # Vazio = todas as tabelas
+
+# Lista extensa de tabelas a serem ignoradas
+ignore_tables:
+  # Tabelas de sistema e auditoria
+  - "migrations"
+  - "schema_versions"
+  - "audit_logs"
+  - "system_logs"
+  - "error_logs"
+  
+  # Tabelas temporárias e de cache
+  - "temp_calculations"
+  - "cache_entries"
+  - "session_data"
+  - "temp_imports"
+  
+  # Tabelas de terceiros/integrações
+  - "external_api_logs"
+  - "webhook_logs"
+  - "integration_status"
+  
+  # Tabelas legadas ou depreciadas
+  - "old_user_data"
+  - "legacy_orders"
+  - "deprecated_settings"
+  
+  # Tabelas de desenvolvimento/teste
+  - "dev_test_data"
+  - "benchmark_results"

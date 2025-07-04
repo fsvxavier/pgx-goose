@@ -1,0 +1,33 @@
+# Configuração para testes automatizados e CI/CD
+# Use este exemplo para configurações de teste em pipelines
+
+dsn: "postgres://test:testpass@test-db:5432/myapp_test?sslmode=disable"
+schema: "public"
+
+# Estrutura para testes
+output_dirs:
+  base: "./test_generated"
+  models: "./test_generated/models"
+  interfaces: "./test_generated/interfaces"
+  repositories: "./test_generated/repositories"
+  mocks: "./test_generated/mocks"
+  tests: "./test_generated/tests"
+
+# Configuração otimizada para testes
+mock_provider: "testify"                   # Mais leve para testes automatizados
+with_tests: true                           # Sempre gerar testes
+
+# Para testes, usar apenas um subconjunto de tabelas
+tables:
+  - "users"
+  - "products"
+  - "orders"
+  - "test_entities"
+
+# Ignorar tabelas que não são necessárias para testes
+ignore_tables:
+  - "audit_logs"
+  - "system_logs"
+  - "migrations"
+  - "large_data_tables"
+  - "external_integrations"

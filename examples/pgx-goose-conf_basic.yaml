@@ -1,0 +1,21 @@
+# Configuração básica para pgx-goose
+# Use este exemplo para uma configuração simples e direta
+
+dsn: "postgres://user:password@localhost:5432/mydb?sslmode=disable"
+schema: "public"
+out: "./generated"
+
+# Opções básicas
+mock_provider: "testify"  # ou "mock"
+with_tests: true
+
+# Exemplo de tabelas específicas (opcional)
+# tables:
+#   - "users"
+#   - "products"
+#   - "orders"
+
+# Exemplo de tabelas a ignorar (opcional)
+# ignore_tables:
+#   - "migrations"
+#   - "schema_versions"

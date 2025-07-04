@@ -1,0 +1,31 @@
+# Configuração para ambiente de desenvolvimento
+# Use este exemplo durante o desenvolvimento com configurações de debug
+
+dsn: "postgres://dev:devpass@localhost:5432/myapp_dev?sslmode=disable"
+schema: "public"
+
+# Estrutura simples para desenvolvimento
+output_dirs:
+  base: "./dev_generated"
+  models: "./dev_generated/models"
+  interfaces: "./dev_generated/repositories"
+  repositories: "./dev_generated/postgres"
+  mocks: "./dev_generated/mocks"
+  tests: "./dev_generated/tests"
+
+# Configuração otimizada para desenvolvimento
+mock_provider: "testify"                   # Mais rápido para desenvolvimento
+with_tests: false                          # Pular testes durante desenvolvimento rápido
+
+# Durante desenvolvimento, focar em algumas tabelas principais
+tables:
+  - "users"
+  - "products"
+  - "orders"
+
+# Ignorar tabelas que mudam frequentemente durante desenvolvimento
+ignore_tables:
+  - "dev_experiments"
+  - "temp_data"
+  - "test_fixtures"
+  - "migrations"
