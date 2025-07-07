@@ -1,0 +1,119 @@
+# Advanced pgx-goose configuration example
+# This configuration showcases all the new optimization features
+
+# Database connection
+dsn: "postgres://user:password@localhost:5432/database?sslmode=disable"
+schema: "public"
+
+# Output configuration
+output_dirs:
+  base: "./generated"
+  models: "./generated/models"
+  interfaces: "./generated/repository/interfaces"
+  repositories: "./generated/repository/postgres"
+  mocks: "./generated/mocks"
+  tests: "./generated/tests"
+
+# Table configuration
+tables: []  # Empty means all tables
+ignore_tables:
+  - "schema_migrations"
+  - "goose_db_version"
+  - "_temp_*"
+
+# Template configuration
+template_dir: "./templates_custom/advanced"
+mock_provider: "testify"  # or "mock"
+with_tests: true
+
+# Performance optimization settings
+optimization:
+  parallel_generation: true
+  max_workers: 8  # 0 = auto-detect based on CPU cores
+  template_cache_size: 100
+  enable_incremental: true
+  
+# Migration generation settings
+migrations:
+  enabled: true
+  migration_dir: "./migrations"
+  migration_format: "goose"  # "goose", "migrate", or "custom"
+  auto_generate: false
+  include_drops: false  # Include DROP statements in migrations
+  include_data: false   # Include data migration statements
+  safe_mode: true      # Generate safer migrations with checks
+  batch_size: 1000     # For data migrations
+
+# Cross-schema support
+cross_schema:
+  enabled: false
+  schemas:
+    - name: "public"
+      dsn: "postgres://user:password@localhost:5432/database?sslmode=disable"
+      output_dir: "./generated/public"
+      package_name: "public"
+      tables: []
+      ignore_tables: ["migrations"]
+    
+    - name: "auth"
+      dsn: "postgres://user:password@localhost:5432/database?sslmode=disable"
+      output_dir: "./generated/auth"
+      package_name: "auth"
+      tables: ["users", "roles", "permissions"]
+      ignore_tables: []
+  
+  cross_schema_package: "crossschema"
+
+# go:generate integration
+go_generate:
+  enabled: true
+  generate_makefile: true
+  generate_vscode_tasks: true
+  generate_gitignore_entries: true
+  
+# Code quality settings
+quality:
+  generate_interfaces: true
+  generate_mocks: true
+  generate_tests: true
+  generate_benchmarks: false
+  generate_examples: false
+  
+  # Validation
+  enable_validation_tags: true
+  enable_json_tags: true
+  enable_db_tags: true
+  
+  # Documentation
+  generate_godoc: true
+  generate_swagger: false
+
+# Advanced template features
+templates:
+  enable_caching: true
+  cache_size: 50
+  precompile_common: true
+  custom_functions:
+    - name: "customFormat"
+      implementation: "github.com/yourorg/pgx-goose-extensions/formatters.CustomFormat"
+    
+# Hooks for custom processing
+hooks:
+  pre_generation:
+    - "echo 'Starting generation...'"
+    - "./scripts/pre-generate.sh"
+  
+  post_generation:
+    - "gofmt -w ./generated/"
+    - "goimports -w ./generated/"
+    - "./scripts/post-generate.sh"
+  
+  on_error:
+    - "echo 'Generation failed'"
+    - "./scripts/cleanup.sh"
+
+# Logging configuration
+logging:
+  level: "info"  # "debug", "info", "warn", "error"
+  format: "text"  # "text" or "json"
+  output: "stdout"  # "stdout", "stderr", or file path

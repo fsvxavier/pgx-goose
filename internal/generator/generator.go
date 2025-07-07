@@ -12,6 +12,11 @@ import (
 	"github.com/fsvxavier/pgx-goose/internal/introspector"
 )
 
+// GeneratorInterface defines the interface for generators
+type GeneratorInterface interface {
+	Generate(tables []introspector.Table, outputPath string) error
+}
+
 // Generator handles code generation
 type Generator struct {
 	config *config.Config

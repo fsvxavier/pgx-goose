@@ -20,6 +20,49 @@ type OutputDirs struct {
 	Tests      string `yaml:"tests" json:"tests"`               // Tests directory
 }
 
+// ParallelConfig represents parallel generation configuration
+type ParallelConfig struct {
+	Enabled bool `yaml:"enabled" json:"enabled"` // Enable parallel generation
+	Workers int  `yaml:"workers" json:"workers"` // Number of worker goroutines
+}
+
+// TemplateOptimizationConfig represents template optimization configuration
+type TemplateOptimizationConfig struct {
+	Enabled    bool `yaml:"enabled" json:"enabled"`       // Enable template optimization
+	CacheSize  int  `yaml:"cache_size" json:"cache_size"` // Template cache size
+	Precompile bool `yaml:"precompile" json:"precompile"` // Precompile templates
+}
+
+// IncrementalConfig represents incremental generation configuration
+type IncrementalConfig struct {
+	Enabled bool `yaml:"enabled" json:"enabled"` // Enable incremental generation
+	Force   bool `yaml:"force" json:"force"`     // Force full regeneration
+}
+
+// CrossSchemaConfig represents cross-schema configuration
+type CrossSchemaConfig struct {
+	Enabled               bool     `yaml:"enabled" json:"enabled"`                               // Enable cross-schema support
+	Schemas               []string `yaml:"schemas" json:"schemas"`                               // List of schemas to include
+	RelationshipDetection bool     `yaml:"relationship_detection" json:"relationship_detection"` // Enable cross-schema relationship detection
+}
+
+// MigrationConfig represents migration generation configuration
+type MigrationConfig struct {
+	Enabled       bool   `yaml:"enabled" json:"enabled"`               // Enable migration generation
+	OutputDir     string `yaml:"output_dir" json:"output_dir"`         // Migration output directory
+	Format        string `yaml:"format" json:"format"`                 // Migration format (goose, etc.)
+	NamingPattern string `yaml:"naming_pattern" json:"naming_pattern"` // Migration file naming pattern
+}
+
+// GoGenerateConfig represents go:generate integration configuration
+type GoGenerateConfig struct {
+	Enabled           bool `yaml:"enabled" json:"enabled"`                         // Enable go:generate integration
+	CreateDirective   bool `yaml:"create_directive" json:"create_directive"`       // Create go:generate directive
+	UpdateMakefile    bool `yaml:"update_makefile" json:"update_makefile"`         // Update Makefile
+	UpdateVSCodeTasks bool `yaml:"update_vscode_tasks" json:"update_vscode_tasks"` // Update VS Code tasks
+	UpdateGitignore   bool `yaml:"update_gitignore" json:"update_gitignore"`       // Update .gitignore
+}
+
 // Config represents the configuration for pgx-goose
 type Config struct {
 	DSN          string     `yaml:"dsn" json:"dsn"`
@@ -31,6 +74,14 @@ type Config struct {
 	TemplateDir  string     `yaml:"template_dir" json:"template_dir"`
 	MockProvider string     `yaml:"mock_provider" json:"mock_provider"`
 	WithTests    bool       `yaml:"with_tests" json:"with_tests"`
+
+	// Advanced features configuration
+	Parallel             ParallelConfig             `yaml:"parallel" json:"parallel"`
+	TemplateOptimization TemplateOptimizationConfig `yaml:"template_optimization" json:"template_optimization"`
+	Incremental          IncrementalConfig          `yaml:"incremental" json:"incremental"`
+	CrossSchema          CrossSchemaConfig          `yaml:"cross_schema" json:"cross_schema"`
+	Migrations           MigrationConfig            `yaml:"migrations" json:"migrations"`
+	GoGenerate           GoGenerateConfig           `yaml:"go_generate" json:"go_generate"`
 }
 
 // LoadFromFile loads configuration from a YAML or JSON file
@@ -117,6 +168,38 @@ func (c *Config) ApplyDefaults() {
 	if c.OutputDir == "" {
 		c.OutputDir = c.OutputDirs.Base
 	}
+
+	// Apply defaults for advanced features
+	c.applyAdvancedDefaults()
+}
+
+// applyAdvancedDefaults applies default values for advanced features
+func (c *Config) applyAdvancedDefaults() {
+	// Parallel configuration defaults
+	if c.Parallel.Workers == 0 {
+		c.Parallel.Workers = 4 // Default to 4 workers
+	}
+
+	// Template optimization defaults
+	if c.TemplateOptimization.CacheSize == 0 {
+		c.TemplateOptimization.CacheSize = 100 // Default cache size
+	}
+
+	// Cross-schema defaults
+	if len(c.CrossSchema.Schemas) == 0 && c.CrossSchema.Enabled {
+		c.CrossSchema.Schemas = []string{"public"} // Default to public schema
+	}
+
+	// Migration defaults
+	if c.Migrations.Format == "" {
+		c.Migrations.Format = "goose"
+	}
+	if c.Migrations.NamingPattern == "" {
+		c.Migrations.NamingPattern = "20060102150405_{{.name}}.sql"
+	}
+	if c.Migrations.OutputDir == "" {
+		c.Migrations.OutputDir = "./migrations"
+	}
 }
 
 // GetModelsDir returns the models output directory
@@ -201,7 +284,90 @@ func (c *Config) Validate() error {
 		return err
 	}
 
+	// Validate advanced features
+	if err := c.validateAdvancedFeatures(); err != nil {
+		return err
+	}
+
 	return nil
+}
+
+// validateAdvancedFeatures validates advanced feature configurations
+func (c *Config) validateAdvancedFeatures() error {
+	// Validate parallel configuration - only if enabled or workers explicitly set
+	if c.Parallel.Enabled || c.Parallel.Workers > 0 {
+		if c.Parallel.Workers < 1 {
+			return fmt.Errorf("parallel workers must be at least 1, got: %d", c.Parallel.Workers)
+		}
+		if c.Parallel.Workers > 32 {
+			return fmt.Errorf("parallel workers cannot exceed 32, got: %d", c.Parallel.Workers)
+		}
+	}
+
+	// Validate template optimization configuration - only if enabled or cache size explicitly set
+	if c.TemplateOptimization.Enabled || c.TemplateOptimization.CacheSize > 0 {
+		if c.TemplateOptimization.CacheSize < 1 {
+			return fmt.Errorf("template cache size must be at least 1, got: %d", c.TemplateOptimization.CacheSize)
+		}
+		if c.TemplateOptimization.CacheSize > 1000 {
+			return fmt.Errorf("template cache size cannot exceed 1000, got: %d", c.TemplateOptimization.CacheSize)
+		}
+	}
+
+	// Validate migration configuration
+	if c.Migrations.Enabled {
+		if c.Migrations.Format != "goose" {
+			return fmt.Errorf("unsupported migration format: %s (currently only 'goose' is supported)", c.Migrations.Format)
+		}
+		if c.Migrations.OutputDir == "" {
+			return fmt.Errorf("migration output directory is required when migrations are enabled")
+		}
+	}
+
+	// Validate cross-schema configuration
+	if c.CrossSchema.Enabled && len(c.CrossSchema.Schemas) == 0 {
+		return fmt.Errorf("at least one schema must be specified when cross-schema is enabled")
+	}
+
+	return nil
+}
+
+// GetMigrationsDir returns the migrations output directory
+func (c *Config) GetMigrationsDir() string {
+	if c.Migrations.OutputDir != "" {
+		return c.Migrations.OutputDir
+	}
+	return "./migrations"
+}
+
+// IsParallelEnabled returns true if parallel generation is enabled
+func (c *Config) IsParallelEnabled() bool {
+	return c.Parallel.Enabled
+}
+
+// IsIncrementalEnabled returns true if incremental generation is enabled
+func (c *Config) IsIncrementalEnabled() bool {
+	return c.Incremental.Enabled
+}
+
+// IsCrossSchemaEnabled returns true if cross-schema support is enabled
+func (c *Config) IsCrossSchemaEnabled() bool {
+	return c.CrossSchema.Enabled
+}
+
+// IsMigrationsEnabled returns true if migration generation is enabled
+func (c *Config) IsMigrationsEnabled() bool {
+	return c.Migrations.Enabled
+}
+
+// IsGoGenerateEnabled returns true if go:generate integration is enabled
+func (c *Config) IsGoGenerateEnabled() bool {
+	return c.GoGenerate.Enabled
+}
+
+// IsTemplateOptimizationEnabled returns true if template optimization is enabled
+func (c *Config) IsTemplateOptimizationEnabled() bool {
+	return c.TemplateOptimization.Enabled
 }
 
 // ShouldIgnoreTable checks if a table should be ignored

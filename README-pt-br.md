@@ -1,11 +1,6 @@
 # PGX-Goose
-- [⚙️ Configuração](#️-configuração)
-- [📁 Estrutura Gerada](#-estrutura-gerada)
-- [🎨 Templates](#-templates)
-- [🔧 Referência CLI](#-referência-cli)
-- [💡 Exemplos de Uso](#-exemplos-de-uso)
-- [🤝 Contribuindo](#-contribuindo)
-- [📚 Documentação](#-documentação)ersion](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org)
+
+[![Go Version](https://img.shields.io/badge/go-1.21+-00ADD8.svg)](https://golang.org)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **PGX-Goose** é uma ferramenta de engenharia reversa para PostgreSQL que gera automaticamente código Go idiomático incluindo structs, interfaces de repositórios, implementações, mocks e testes unitários. Suporta múltiplos schemas para arquiteturas empresariais complexas.
@@ -23,7 +18,7 @@
 - [🔧 Referência da CLI](#-referência-da-cli)
 - [💡 Exemplos de Uso](#-exemplos-de-uso)
 - [🤝 Contribuição](#-contribuição)
-- [ Documentação](#-documentação)
+- [📚 Documentação](#-documentação)
 
 ## 🚀 Características
 
@@ -37,6 +32,15 @@
 - **⚡ Operações Avançadas**: Transações, operações em lote e soft delete
 - **🔧 CLI Robusta**: Interface de linha de comando completa com validação e logging configurável
 - **📝 Configuração Flexível**: Suporte a YAML/JSON com precedência hierárquica
+
+### 🚀 Funcionalidades Avançadas
+
+- **⚡ Geração Paralela**: Processamento concorrente multi-worker para melhor performance
+- **🎯 Geração Incremental**: Detecção inteligente de mudanças para regenerar apenas arquivos modificados
+- **📦 Otimização de Templates**: Sistema de cache inteligente para templates compilados
+- **🔄 Suporte Cross-Schema**: Gera código através de múltiplos schemas PostgreSQL com detecção de relacionamentos
+- **🗄️ Geração de Migrações**: Criação automática de migrações SQL compatíveis com Goose
+- **🛠️ Integração go:generate**: Integração perfeita com o sistema de build do Go
 
 ## 📦 Instalação
 
@@ -631,64 +635,25 @@ pgx-goose/
 ├── internal/
 │   ├── config/            # Configuração
 │   ├── generator/         # Geração de código
-│   └── introspector/      # Introspecção PostgreSQL
-├── templates/             # Templates padrão
-├── templates_postgresql/  # Templates otimizados
-├── examples/              # Exemplos de configuração
-└── docs/                  # Documentação adicional
+│   └── introspector/      # Introspecção de banco
+├── templates/              # Templates padrão
+├── docs/                   # Documentação
+└── examples/               # Exemplos de configuração
 ```
 
-### Guidelines
+### Testes
 
-- **Testes**: Toda nova funcionalidade deve ter testes
-- **Documentação**: Atualize README.md para novas features
-- **Templates**: Mantenha compatibilidade com templates existentes
-- **Logs**: Use slog para logging estruturado
+- Testes unitários com `testify` e `gomock`
+- Testes de integração com banco de dados real (usando `testcontainers`)
+- Cobertura de código com `go test -cover`
 
----
+### Problemas Comuns
 
-## 📄 Licença
+- **Erro de conexão**: Verifique a string DSN e se o banco de dados está acessível
+- **Problemas de permissão**: O usuário do banco de dados precisa ter permissões adequadas
+- **Erros de sintaxe em templates**: Verifique se os templates personalizados estão corretos
 
-Licenciado sob a [Licença MIT](LICENSE).
+### Suporte
 
-## 🙏 Agradecimentos
-
-- [pgx](https://github.com/jackc/pgx) - Driver PostgreSQL de alta performance
-- [Cobra](https://github.com/spf13/cobra) - Framework CLI
-- [testify](https://github.com/stretchr/testify) - Framework de testes
-- [testcontainers](https://github.com/testcontainers/testcontainers-go) - Testes de integração
-
-## 📞 Suporte
-
-- **Issues**: [GitHub Issues](https://github.com/fsvxavier/nexs-lib/issues)
-- **Discussões**: [GitHub Discussions](https://github.com/fsvxavier/nexs-lib/discussions)
-
----
-
-**PGX-Goose** - Transformando seu PostgreSQL em código Go idiomático! 🚀
-
-## 📚 Documentação
-
-Documentação completa disponível em múltiplos idiomas:
-
-- 🇧🇷 **[Português (Brasil)](docs/usage-pt-br.md)** - Documentação completa em português brasileiro
-- 🇺🇸 **[English](docs/usage-en.md)** - Complete documentation in English  
-- 🇪🇸 **[Español](docs/usage-es.md)** - Documentación completa en español
-- 📋 **[Quick Reference](docs/quick-reference.md)** - Referência rápida de comandos e configurações
-
-### O que está coberto na documentação:
-- Instalação detalhada e pré-requisitos
-- Configuração completa (YAML/JSON)
-- Uso básico e avançado
-- Exemplos práticos para diferentes cenários
-- Estrutura de arquivos gerados
-- Personalização com templates
-- Troubleshooting e solução de problemas
-- Integração com projetos (Makefile, CI/CD)
-
-### Exemplos de Configuração
-Veja a pasta [examples/](examples/) para:
-- Configurações básicas e avançadas
-- Setups específicos por ambiente (dev, prod, testing)
-- Configurações para microserviços
-- Exemplos de filtragem de tabelas
+- Abra uma issue no GitHub
+- Consulte a documentação completa em [docs/usage-pt-br.md](docs/usage-pt-br.md)

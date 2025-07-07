@@ -31,6 +31,16 @@ var (
 	useYAML       bool
 	verbose       bool
 	debug         bool
+
+	// New flags for advanced features
+	parallel           bool
+	workers            int
+	incremental        bool
+	forceRegenerate    bool
+	generateMigrations bool
+	enableCrossSchema  bool
+	generateGoGenerate bool
+	optimizeTemplates  bool
 )
 
 var rootCmd = &cobra.Command{
@@ -67,6 +77,16 @@ func init() {
 	rootCmd.PersistentFlags().BoolVar(&useYAML, "yaml", true, "Use YAML configuration format")
 	rootCmd.PersistentFlags().BoolVar(&verbose, "verbose", false, "Enable verbose logging")
 	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "Enable debug logging")
+
+	// New flags for advanced features
+	rootCmd.PersistentFlags().BoolVar(&parallel, "parallel", false, "Enable parallel code generation")
+	rootCmd.PersistentFlags().IntVar(&workers, "workers", 0, "Number of parallel workers (0 = auto-detect)")
+	rootCmd.PersistentFlags().BoolVar(&incremental, "incremental", false, "Enable incremental generation")
+	rootCmd.PersistentFlags().BoolVar(&forceRegenerate, "force", false, "Force full regeneration (ignore cache)")
+	rootCmd.PersistentFlags().BoolVar(&generateMigrations, "generate-migrations", false, "Generate database migrations")
+	rootCmd.PersistentFlags().BoolVar(&enableCrossSchema, "cross-schema", false, "Enable cross-schema relationship detection")
+	rootCmd.PersistentFlags().BoolVar(&generateGoGenerate, "go-generate", false, "Generate go:generate integration files")
+	rootCmd.PersistentFlags().BoolVar(&optimizeTemplates, "optimize-templates", true, "Enable template optimization and caching")
 }
 
 func runGenerate(cmd *cobra.Command, args []string) error {
@@ -84,6 +104,49 @@ func runGenerate(cmd *cobra.Command, args []string) error {
 	// Log specific schema information early to verify it's being read correctly
 	slog.Info("Using database schema", "schema", cfg.Schema)
 
+	// Handle go:generate integration
+	if generateGoGenerate {
+		return handleGoGenerateIntegration(cfg)
+	}
+
+	// Handle migration generation
+	if generateMigrations {
+		return handleMigrationGeneration(cfg)
+	}
+
+	// Handle cross-schema generation
+	if enableCrossSchema {
+		return handleCrossSchemaGeneration(cfg)
+	}
+
+	// Handle regular generation (with potential optimizations)
+	return handleRegularGeneration(cfg)
+}
+
+// handleGoGenerateIntegration handles go:generate integration setup
+func handleGoGenerateIntegration(cfg *config.Config) error {
+	slog.Info("Setting up go:generate integration")
+
+	integrator := generator.NewGoGenerateIntegrator(cfg)
+	return integrator.GenerateAllIntegrationFiles()
+}
+
+// handleMigrationGeneration handles database migration generation
+func handleMigrationGeneration(cfg *config.Config) error {
+	slog.Info("Generating database migrations")
+
+	// This would need old and new schema - for now, return not implemented
+	return fmt.Errorf("migration generation requires comparison between two schemas - not fully implemented yet")
+}
+
+// handleCrossSchemaGeneration handles cross-schema code generation
+func handleCrossSchemaGeneration(cfg *config.Config) error {
+	slog.Info("Cross-schema generation not fully implemented yet")
+	return fmt.Errorf("cross-schema generation requires multi-schema configuration - not fully implemented yet")
+}
+
+// handleRegularGeneration handles regular code generation with optimizations
+func handleRegularGeneration(cfg *config.Config) error {
 	// Create introspector
 	inspector := introspector.New(cfg.DSN, cfg.Schema)
 
@@ -125,6 +188,45 @@ func runGenerate(cmd *cobra.Command, args []string) error {
 	for _, table := range schema.Tables {
 		slog.Debug("Table details", "name", table.Name, "columns", len(table.Columns))
 	}
+
+	// Choose generation strategy based on flags
+	if incremental {
+		return runIncrementalGeneration(cfg, schema)
+	} else if parallel {
+		return runParallelGeneration(cfg, schema)
+	} else {
+		return runStandardGeneration(cfg, schema)
+	}
+}
+
+// runIncrementalGeneration runs incremental code generation
+func runIncrementalGeneration(cfg *config.Config, schema *introspector.Schema) error {
+	slog.Info("Using incremental generation")
+
+	ig := generator.NewIncrementalGenerator(cfg)
+
+	if forceRegenerate {
+		if err := ig.ForceRegeneration(); err != nil {
+			return fmt.Errorf("failed to force regeneration: %w", err)
+		}
+	}
+
+	return ig.GenerateIncremental(schema)
+}
+
+// runParallelGeneration runs parallel code generation
+func runParallelGeneration(cfg *config.Config, schema *introspector.Schema) error {
+	slog.Info("Using parallel generation", "workers", workers)
+
+	pg := generator.NewParallelGenerator(cfg, workers)
+	defer pg.Cleanup()
+
+	return pg.GenerateParallel(schema)
+}
+
+// runStandardGeneration runs standard code generation with optional optimizations
+func runStandardGeneration(cfg *config.Config, schema *introspector.Schema) error {
+	slog.Info("Using standard generation")
 
 	// Create generator
 	gen := generator.New(cfg)

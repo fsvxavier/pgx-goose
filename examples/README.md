@@ -14,6 +14,15 @@ This folder contains different example configuration files for PGX-Goose, demons
 - **`pgx-goose-conf_advanced.yaml`** - Complete configuration with separate directories and all options
 - **`pgx-goose-conf_separate_dirs.yaml`** - Focus on organization with separate directories by type
 
+### Advanced Feature Configurations
+- **`pgx-goose-conf_advanced_optimized.yaml`** - Complete configuration with all advanced features enabled:
+  - Parallel generation for improved performance
+  - Template optimization and caching
+  - Incremental generation for faster updates
+  - Cross-schema support
+  - Migration generation
+  - go:generate integration
+
 ### Environment-Specific Configurations
 - **`pgx-goose-conf_development.yaml`** - Optimized for local development
 - **`pgx-goose-conf_production.yaml`** - Robust configuration for production
@@ -47,6 +56,48 @@ pgx-goose --config examples/pgx-goose-conf_basic.yaml
 ```bash
 cp examples/pgx-goose-conf_basic.yaml pgx-goose-conf.yaml
 pgx-goose
+```
+
+## Advanced Features Examples
+
+### Performance Optimization
+For large databases with many tables, use the optimized configuration:
+```bash
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml
+```
+
+This configuration includes:
+- **Parallel processing** with 8 workers
+- **Template caching** for faster regeneration
+- **Incremental generation** to only update changed files
+- **Cross-schema support** for multi-schema applications
+
+### Incremental Development Workflow
+```bash
+# First run - generates all files
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml
+
+# Subsequent runs - only regenerates changed files
+pgx-goose --incremental
+
+# Force complete regeneration when needed
+pgx-goose --force
+```
+
+### Multi-Schema Projects
+```bash
+# Generate code for multiple schemas
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml --schemas "public,auth,audit"
+```
+
+### CI/CD Integration
+For automated builds, use go:generate integration:
+```bash
+# Add to your Go files:
+//go:generate pgx-goose --config pgx-goose-conf.yaml
+
+# Then run:
+go generate ./...
 ```
 
 ## Configuration File Structure

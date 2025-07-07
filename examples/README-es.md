@@ -14,6 +14,15 @@ Esta carpeta contiene diferentes archivos de ejemplo de configuración para PGX-
 - **`pgx-goose-conf_advanced.yaml`** - Configuración completa con directorios separados y todas las opciones
 - **`pgx-goose-conf_separate_dirs.yaml`** - Enfoque en organización con directorios separados por tipo
 
+### Configuraciones de Funcionalidades Avanzadas
+- **`pgx-goose-conf_advanced_optimized.yaml`** - Configuración completa con todas las funcionalidades avanzadas habilitadas:
+  - Generación paralela para mejor rendimiento
+  - Optimización y caché de plantillas
+  - Generación incremental para actualizaciones más rápidas
+  - Soporte cross-schema
+  - Generación de migraciones
+  - Integración go:generate
+
 ### Configuraciones por Entorno
 - **`pgx-goose-conf_development.yaml`** - Optimizada para desarrollo local
 - **`pgx-goose-conf_production.yaml`** - Configuración robusta para producción
@@ -47,6 +56,48 @@ pgx-goose --config examples/pgx-goose-conf_basic.yaml
 ```bash
 cp examples/pgx-goose-conf_basic.yaml pgx-goose-conf.yaml
 pgx-goose
+```
+
+## Ejemplos de Funcionalidades Avanzadas
+
+### Optimización de Rendimiento
+Para bases de datos grandes con muchas tablas, use la configuración optimizada:
+```bash
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml
+```
+
+Esta configuración incluye:
+- **Procesamiento paralelo** con 8 workers
+- **Caché de plantillas** para regeneración más rápida
+- **Generación incremental** para actualizar solo archivos cambiados
+- **Soporte cross-schema** para aplicaciones multi-esquema
+
+### Flujo de Desarrollo Incremental
+```bash
+# Primera ejecución - genera todos los archivos
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml
+
+# Ejecuciones posteriores - solo regenera archivos modificados
+pgx-goose --incremental
+
+# Forzar regeneración completa cuando sea necesario
+pgx-goose --force
+```
+
+### Proyectos Multi-Schema
+```bash
+# Generar código para múltiples esquemas
+pgx-goose --config examples/pgx-goose-conf_advanced_optimized.yaml --schemas "public,auth,audit"
+```
+
+### Integración CI/CD
+Para builds automatizados, use la integración go:generate:
+```bash
+# Agregue a sus archivos Go:
+//go:generate pgx-goose --config pgx-goose-conf.yaml
+
+# Luego ejecute:
+go generate ./...
 ```
 
 ## Estructura de Archivos de Configuración

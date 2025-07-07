@@ -33,6 +33,15 @@
 - **🔧 CLI Robusto**: Interfaz de línea de comandos completa con validación y logging configurable
 - **📝 Configuración Flexible**: Soporte YAML/JSON con precedencia jerárquica
 
+### 🚀 Funcionalidades Avanzadas
+
+- **⚡ Generación Paralela**: Procesamiento concurrente multi-worker para mejor rendimiento
+- **🎯 Generación Incremental**: Detección inteligente de cambios para regenerar solo archivos modificados
+- **📦 Optimización de Plantillas**: Sistema de caché inteligente para plantillas compiladas
+- **🔄 Soporte Cross-Schema**: Genera código a través de múltiples esquemas PostgreSQL con detección de relaciones
+- **🗄️ Generación de Migraciones**: Creación automática de migraciones SQL compatibles con Goose
+- **🛠️ Integración go:generate**: Integración perfecta con el sistema de build de Go
+
 ## 📦 Instalación
 
 ### Vía go install (Recomendado)

@@ -33,6 +33,15 @@
 - **🔧 Robust CLI**: Complete command line interface with validation and configurable logging
 - **📝 Flexible Configuration**: YAML/JSON support with hierarchical precedence
 
+### 🚀 Advanced Features
+
+- **⚡ Parallel Generation**: Multi-worker concurrent processing for improved performance
+- **🎯 Incremental Generation**: Smart change detection to regenerate only modified files
+- **📦 Template Optimization**: Intelligent caching system for compiled templates
+- **🔄 Cross-Schema Support**: Generate code across multiple PostgreSQL schemas with relationship detection
+- **🗄️ Migration Generation**: Automatic Goose-compatible SQL migration creation
+- **🛠️ go:generate Integration**: Seamless integration with Go's build system
+
 ## 📦 Installation
 
 ### Via go install (Recommended)
