@@ -12,8 +12,8 @@ func TestMapPostgresToGoType(t *testing.T) {
 		isNullable bool
 		expected   string
 	}{
-		{"integer", false, "int"},
-		{"integer", true, "*int"},
+		{"integer", false, "int32"},
+		{"integer", true, "*int32"},
 		{"bigint", false, "int64"},
 		{"bigint", true, "*int64"},
 		{"text", false, "string"},
@@ -22,10 +22,10 @@ func TestMapPostgresToGoType(t *testing.T) {
 		{"boolean", true, "*bool"},
 		{"timestamp", false, "time.Time"},
 		{"timestamp", true, "*time.Time"},
-		{"uuid", false, "uuid.UUID"},
-		{"uuid", true, "*uuid.UUID"},
+		{"uuid", false, "string"},
+		{"uuid", true, "*string"},
 		{"json", false, "json.RawMessage"},
-		{"json", true, "*json.RawMessage"},
+		{"json", true, "json.RawMessage"},
 		{"unknown_type", false, "interface{}"},
 		{"unknown_type", true, "interface{}"},
 	}

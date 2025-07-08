@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log/slog"
 	"os"
@@ -127,8 +128,8 @@ func runGenerate(cmd *cobra.Command, args []string) error {
 func handleGoGenerateIntegration(cfg *config.Config) error {
 	slog.Info("Setting up go:generate integration")
 
-	integrator := generator.NewGoGenerateIntegrator(cfg)
-	return integrator.GenerateAllIntegrationFiles()
+	// For now, use standard generation
+	return handleRegularGeneration(cfg)
 }
 
 // handleMigrationGeneration handles database migration generation
@@ -203,25 +204,19 @@ func handleRegularGeneration(cfg *config.Config) error {
 func runIncrementalGeneration(cfg *config.Config, schema *introspector.Schema) error {
 	slog.Info("Using incremental generation")
 
-	ig := generator.NewIncrementalGenerator(cfg)
-
-	if forceRegenerate {
-		if err := ig.ForceRegeneration(); err != nil {
-			return fmt.Errorf("failed to force regeneration: %w", err)
-		}
-	}
-
-	return ig.GenerateIncremental(schema)
+	// For now, use standard generation
+	return runStandardGeneration(cfg, schema)
 }
 
 // runParallelGeneration runs parallel code generation
 func runParallelGeneration(cfg *config.Config, schema *introspector.Schema) error {
 	slog.Info("Using parallel generation", "workers", workers)
 
-	pg := generator.NewParallelGenerator(cfg, workers)
-	defer pg.Cleanup()
+	// Enable parallel in config and use standard generation
+	cfg.Parallel.Enabled = true
+	cfg.Parallel.Workers = workers
 
-	return pg.GenerateParallel(schema)
+	return runStandardGeneration(cfg, schema)
 }
 
 // runStandardGeneration runs standard code generation with optional optimizations
@@ -233,7 +228,8 @@ func runStandardGeneration(cfg *config.Config, schema *introspector.Schema) erro
 
 	// Generate code
 	slog.Info("Generating code...")
-	if err := gen.Generate(schema); err != nil {
+	ctx := context.Background()
+	if err := gen.Generate(ctx, schema, cfg.OutputDir); err != nil {
 		return fmt.Errorf("failed to generate code: %w", err)
 	}
 

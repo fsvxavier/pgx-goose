@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"path/filepath"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -777,4 +778,211 @@ go_generate:
 	assert.True(t, cfg.GoGenerate.Enabled)
 	assert.True(t, cfg.GoGenerate.CreateDirective)
 	assert.True(t, cfg.GoGenerate.UpdateMakefile)
+}
+
+func TestConfig_SaveToFile(t *testing.T) {
+	tests := []struct {
+		name     string
+		config   *Config
+		filename string
+		wantErr  bool
+	}{
+		{
+			name: "save to YAML file",
+			config: &Config{
+				DSN:    "postgres://user:pass@localhost/db",
+				Schema: "public",
+				OutputDirs: OutputDirs{
+					Base: "./test",
+				},
+			},
+			filename: "test_config.yaml",
+			wantErr:  false,
+		},
+		{
+			name: "save to JSON file",
+			config: &Config{
+				DSN:    "postgres://user:pass@localhost/db",
+				Schema: "public",
+				OutputDirs: OutputDirs{
+					Base: "./test",
+				},
+			},
+			filename: "test_config.json",
+			wantErr:  false,
+		},
+		{
+			name: "unsupported file format",
+			config: &Config{
+				DSN: "postgres://user:pass@localhost/db",
+			},
+			filename: "test_config.txt",
+			wantErr:  true,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			// Create temp directory
+			tempDir, err := os.MkdirTemp("", "config_test")
+			require.NoError(t, err)
+			defer os.RemoveAll(tempDir)
+
+			// Create test file path
+			testFile := filepath.Join(tempDir, tt.filename)
+
+			err = tt.config.SaveToFile(testFile)
+			if tt.wantErr {
+				assert.Error(t, err)
+				return
+			}
+
+			assert.NoError(t, err)
+			assert.FileExists(t, testFile)
+
+			// Read back and verify
+			data, err := os.ReadFile(testFile)
+			require.NoError(t, err)
+			assert.NotEmpty(t, data)
+		})
+	}
+}
+
+func TestConfig_DirectoryGetters(t *testing.T) {
+	tests := []struct {
+		name     string
+		config   *Config
+		expected map[string]string
+	}{
+		{
+			name: "with explicit output dirs",
+			config: &Config{
+				OutputDirs: OutputDirs{
+					Base:       "/custom/base",
+					Models:     "/custom/models",
+					Interfaces: "/custom/interfaces",
+					Repos:      "/custom/repos",
+					Mocks:      "/custom/mocks",
+					Tests:      "/custom/tests",
+				},
+			},
+			expected: map[string]string{
+				"base":       "/custom/base",
+				"models":     "/custom/models",
+				"interfaces": "/custom/interfaces",
+				"repos":      "/custom/repos",
+				"mocks":      "/custom/mocks",
+				"tests":      "/custom/tests",
+			},
+		},
+		{
+			name: "with legacy output dir",
+			config: &Config{
+				OutputDir: "/legacy/path",
+			},
+			expected: map[string]string{
+				"base":       "/legacy/path",
+				"models":     "/legacy/path/models",
+				"interfaces": "/legacy/path/repository/interfaces",
+				"repos":      "/legacy/path/repository/postgres",
+				"mocks":      "/legacy/path/mocks",
+				"tests":      "/legacy/path/tests",
+			},
+		},
+		{
+			name:   "with defaults",
+			config: &Config{},
+			expected: map[string]string{
+				"base":       "./pgx-goose",
+				"models":     "pgx-goose/models",
+				"interfaces": "pgx-goose/repository/interfaces",
+				"repos":      "pgx-goose/repository/postgres",
+				"mocks":      "pgx-goose/mocks",
+				"tests":      "pgx-goose/tests",
+			},
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			assert.Equal(t, tt.expected["base"], tt.config.GetBaseDir())
+			assert.Equal(t, tt.expected["models"], tt.config.GetModelsDir())
+			assert.Equal(t, tt.expected["interfaces"], tt.config.GetInterfacesDir())
+			assert.Equal(t, tt.expected["repos"], tt.config.GetReposDir())
+			assert.Equal(t, tt.expected["mocks"], tt.config.GetMocksDir())
+			assert.Equal(t, tt.expected["tests"], tt.config.GetTestsDir())
+		})
+	}
+}
+
+func TestConfig_GetAllOutputDirs(t *testing.T) {
+	tests := []struct {
+		name      string
+		config    *Config
+		withTests bool
+		expected  int
+	}{
+		{
+			name: "without tests",
+			config: &Config{
+				WithTests: false,
+				OutputDirs: OutputDirs{
+					Base: "./test",
+				},
+			},
+			expected: 4, // models, interfaces, repos, mocks
+		},
+		{
+			name: "with tests",
+			config: &Config{
+				WithTests: true,
+				OutputDirs: OutputDirs{
+					Base: "./test",
+				},
+			},
+			expected: 5, // models, interfaces, repos, mocks, tests
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			dirs := tt.config.GetAllOutputDirs()
+			assert.Len(t, dirs, tt.expected)
+
+			// Verify all directories are non-empty
+			for _, dir := range dirs {
+				assert.NotEmpty(t, dir)
+			}
+		})
+	}
+}
+
+func TestConfig_GetMigrationsDir(t *testing.T) {
+	tests := []struct {
+		name     string
+		config   *Config
+		expected string
+	}{
+		{
+			name: "explicit migrations directory",
+			config: &Config{
+				Migrations: MigrationConfig{
+					OutputDir: "/custom/migrations",
+				},
+			},
+			expected: "/custom/migrations",
+		},
+		{
+			name:     "default migrations directory",
+			config:   &Config{},
+			expected: "./migrations",
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			tt.config.ApplyDefaults()
+			assert.Equal(t, tt.expected, tt.config.GetMigrationsDir())
+		})
+	}
 }

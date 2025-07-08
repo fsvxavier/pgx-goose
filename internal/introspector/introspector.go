@@ -3,7 +3,6 @@ package introspector
 import (
 	"context"
 	"fmt"
-	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -104,6 +103,26 @@ func (i *Introspector) IntrospectSchema(tables []string) (*Schema, error) {
 	}
 
 	return schema, nil
+}
+
+// GetAllTables returns all table names in the schema
+func (i *Introspector) GetAllTables() ([]string, error) {
+	ctx := context.Background()
+
+	// Connect to database
+	pool, err := pgxpool.New(ctx, i.dsn)
+	if err != nil {
+		return nil, fmt.Errorf("failed to connect to database: %w", err)
+	}
+	defer pool.Close()
+
+	return i.getAllTables(ctx, pool)
+}
+
+// Close closes the introspector (no-op for current implementation)
+func (i *Introspector) Close() {
+	// Current implementation doesn't maintain persistent connections
+	// This is here to satisfy the interface
 }
 
 // getAllTables returns all table names in the specified schema
@@ -360,72 +379,4 @@ func (i *Introspector) getForeignKeys(ctx context.Context, pool *pgxpool.Pool, t
 	}
 
 	return foreignKeys, rows.Err()
-}
-
-// mapPostgresToGoType maps PostgreSQL types to Go types
-func mapPostgresToGoType(pgType string, isNullable bool) string {
-	var goType string
-
-	switch strings.ToLower(pgType) {
-	case "integer", "int", "int4":
-		goType = "int"
-	case "bigint", "int8":
-		goType = "int64"
-	case "smallint", "int2":
-		goType = "int16"
-	case "serial", "serial4":
-		goType = "int"
-	case "bigserial", "serial8":
-		goType = "int64"
-	case "real", "float4":
-		goType = "float32"
-	case "double precision", "float8":
-		goType = "float64"
-	case "numeric", "decimal":
-		goType = "decimal.Decimal"
-	case "boolean", "bool":
-		goType = "bool"
-	case "character varying", "varchar", "character", "char", "text":
-		goType = "string"
-	case "date":
-		goType = "time.Time"
-	case "timestamp", "timestamp without time zone", "timestamp with time zone", "timestamptz":
-		goType = "time.Time"
-	case "time", "time without time zone", "time with time zone", "timetz":
-		goType = "time.Time"
-	case "uuid":
-		goType = "uuid.UUID"
-	case "json", "jsonb":
-		goType = "json.RawMessage"
-	case "bytea":
-		goType = "[]byte"
-	default:
-		goType = "interface{}"
-	}
-
-	// Handle nullable types
-	if isNullable && goType != "interface{}" {
-		switch goType {
-		case "int":
-			return "*int"
-		case "int64":
-			return "*int64"
-		case "int16":
-			return "*int16"
-		case "float32":
-			return "*float32"
-		case "float64":
-			return "*float64"
-		case "bool":
-			return "*bool"
-		case "string":
-			return "*string"
-		case "time.Time":
-			return "*time.Time"
-		default:
-			return "*" + goType
-		}
-	}
-
-	return goType
 }
