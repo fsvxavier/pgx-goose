@@ -10,81 +10,79 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
-// OutputDirs represents the output directories for different types of generated files
+// OutputDirs represents the output directories for different types of generated files.
 type OutputDirs struct {
-	Base       string `yaml:"base" json:"base"`                 // Base output directory
-	Models     string `yaml:"models" json:"models"`             // Models output directory
-	Interfaces string `yaml:"interfaces" json:"interfaces"`     // Repository interfaces directory
-	Repos      string `yaml:"repositories" json:"repositories"` // Repository implementations directory
-	Mocks      string `yaml:"mocks" json:"mocks"`               // Mocks directory
-	Tests      string `yaml:"tests" json:"tests"`               // Tests directory
+	Base       string `json:"base"         yaml:"base"`         // Base output directory
+	Models     string `json:"models"       yaml:"models"`       // Models output directory
+	Interfaces string `json:"interfaces"   yaml:"interfaces"`   // Repository interfaces directory
+	Repos      string `json:"repositories" yaml:"repositories"` // Repository implementations directory
+	Mocks      string `json:"mocks"        yaml:"mocks"`        // Mocks directory
+	Tests      string `json:"tests"        yaml:"tests"`        // Tests directory
 }
 
-// ParallelConfig represents parallel generation configuration
+// ParallelConfig represents parallel generation configuration.
 type ParallelConfig struct {
-	Enabled bool `yaml:"enabled" json:"enabled"` // Enable parallel generation
-	Workers int  `yaml:"workers" json:"workers"` // Number of worker goroutines
+	Enabled bool `json:"enabled" yaml:"enabled"` // Enable parallel generation
+	Workers int  `json:"workers" yaml:"workers"` // Number of worker goroutines
 }
 
-// TemplateOptimizationConfig represents template optimization configuration
+// TemplateOptimizationConfig represents template optimization configuration.
 type TemplateOptimizationConfig struct {
-	Enabled    bool `yaml:"enabled" json:"enabled"`       // Enable template optimization
-	CacheSize  int  `yaml:"cache_size" json:"cache_size"` // Template cache size
-	Precompile bool `yaml:"precompile" json:"precompile"` // Precompile templates
+	CacheSize  int  `json:"cache_size" yaml:"cache_size"`
+	Enabled    bool `json:"enabled"    yaml:"enabled"`
+	Precompile bool `json:"precompile" yaml:"precompile"`
 }
 
-// IncrementalConfig represents incremental generation configuration
+// IncrementalConfig represents incremental generation configuration.
 type IncrementalConfig struct {
-	Enabled bool `yaml:"enabled" json:"enabled"` // Enable incremental generation
-	Force   bool `yaml:"force" json:"force"`     // Force full regeneration
+	Enabled bool `json:"enabled" yaml:"enabled"` // Enable incremental generation
+	Force   bool `json:"force"   yaml:"force"`   // Force full regeneration
 }
 
-// CrossSchemaConfig represents cross-schema configuration
+// CrossSchemaConfig represents cross-schema configuration.
 type CrossSchemaConfig struct {
-	Enabled               bool     `yaml:"enabled" json:"enabled"`                               // Enable cross-schema support
-	Schemas               []string `yaml:"schemas" json:"schemas"`                               // List of schemas to include
-	RelationshipDetection bool     `yaml:"relationship_detection" json:"relationship_detection"` // Enable cross-schema relationship detection
+	Schemas               []string `json:"schemas"                yaml:"schemas"`
+	Enabled               bool     `json:"enabled"                yaml:"enabled"`
+	RelationshipDetection bool     `json:"relationship_detection" yaml:"relationship_detection"`
 }
 
-// MigrationConfig represents migration generation configuration
+// MigrationConfig represents migration generation configuration.
 type MigrationConfig struct {
-	Enabled       bool   `yaml:"enabled" json:"enabled"`               // Enable migration generation
-	OutputDir     string `yaml:"output_dir" json:"output_dir"`         // Migration output directory
-	Format        string `yaml:"format" json:"format"`                 // Migration format (goose, etc.)
-	NamingPattern string `yaml:"naming_pattern" json:"naming_pattern"` // Migration file naming pattern
+	OutputDir     string `json:"output_dir"     yaml:"output_dir"`
+	Format        string `json:"format"         yaml:"format"`
+	NamingPattern string `json:"naming_pattern" yaml:"naming_pattern"`
+	Enabled       bool   `json:"enabled"        yaml:"enabled"`
 }
 
-// GoGenerateConfig represents go:generate integration configuration
+// GoGenerateConfig represents go:generate integration configuration.
 type GoGenerateConfig struct {
-	Enabled           bool `yaml:"enabled" json:"enabled"`                         // Enable go:generate integration
-	CreateDirective   bool `yaml:"create_directive" json:"create_directive"`       // Create go:generate directive
-	UpdateMakefile    bool `yaml:"update_makefile" json:"update_makefile"`         // Update Makefile
-	UpdateVSCodeTasks bool `yaml:"update_vscode_tasks" json:"update_vscode_tasks"` // Update VS Code tasks
-	UpdateGitignore   bool `yaml:"update_gitignore" json:"update_gitignore"`       // Update .gitignore
+	Enabled           bool `json:"enabled"             yaml:"enabled"`             // Enable go:generate integration
+	CreateDirective   bool `json:"create_directive"    yaml:"create_directive"`    // Create go:generate directive
+	UpdateMakefile    bool `json:"update_makefile"     yaml:"update_makefile"`     // Update Makefile
+	UpdateVSCodeTasks bool `json:"update_vscode_tasks" yaml:"update_vscode_tasks"` // Update VS Code tasks
+	UpdateGitignore   bool `json:"update_gitignore"    yaml:"update_gitignore"`    // Update .gitignore
 }
 
-// Config represents the configuration for pgx-goose
+// Config represents the configuration for pgx-goose.
 type Config struct {
-	DSN          string     `yaml:"dsn" json:"dsn"`
-	Schema       string     `yaml:"schema" json:"schema"`               // Database schema to introspect
-	OutputDir    string     `yaml:"out" json:"out"`                     // Legacy field, kept for compatibility
-	OutputDirs   OutputDirs `yaml:"output_dirs" json:"output_dirs"`     // New structured output configuration
-	Tables       []string   `yaml:"tables" json:"tables"`               // Specific tables to include (empty = all tables)
-	IgnoreTables []string   `yaml:"ignore_tables" json:"ignore_tables"` // Tables to ignore during generation
-	TemplateDir  string     `yaml:"template_dir" json:"template_dir"`
-	MockProvider string     `yaml:"mock_provider" json:"mock_provider"`
-	WithTests    bool       `yaml:"with_tests" json:"with_tests"`
-
-	// Advanced features configuration
-	Parallel             ParallelConfig             `yaml:"parallel" json:"parallel"`
-	TemplateOptimization TemplateOptimizationConfig `yaml:"template_optimization" json:"template_optimization"`
-	Incremental          IncrementalConfig          `yaml:"incremental" json:"incremental"`
-	CrossSchema          CrossSchemaConfig          `yaml:"cross_schema" json:"cross_schema"`
-	Migrations           MigrationConfig            `yaml:"migrations" json:"migrations"`
-	GoGenerate           GoGenerateConfig           `yaml:"go_generate" json:"go_generate"`
+	OutputDirs           OutputDirs                 `json:"output_dirs"   yaml:"output_dirs"`
+	Migrations           MigrationConfig            `json:"migrations"            yaml:"migrations"`
+	TemplateDir          string                     `json:"template_dir"  yaml:"template_dir"`
+	OutputDir            string                     `json:"out"           yaml:"out"`
+	DSN                  string                     `json:"dsn"           yaml:"dsn"`
+	MockProvider         string                     `json:"mock_provider" yaml:"mock_provider"`
+	Schema               string                     `json:"schema"        yaml:"schema"`
+	Tables               []string                   `json:"tables"        yaml:"tables"`
+	IgnoreTables         []string                   `json:"ignore_tables" yaml:"ignore_tables"`
+	CrossSchema          CrossSchemaConfig          `json:"cross_schema"          yaml:"cross_schema"`
+	TemplateOptimization TemplateOptimizationConfig `json:"template_optimization" yaml:"template_optimization"`
+	Parallel             ParallelConfig             `json:"parallel"              yaml:"parallel"`
+	GoGenerate           GoGenerateConfig           `json:"go_generate"           yaml:"go_generate"`
+	Incremental          IncrementalConfig          `json:"incremental"           yaml:"incremental"`
+	WithTests            bool                       `json:"with_tests"    yaml:"with_tests"`
 }
 
-// LoadFromFile loads configuration from a YAML or JSON file
+// LoadFromFile loads configuration from a YAML or JSON file.
 func (c *Config) LoadFromFile(filename string) error {
 	data, err := os.ReadFile(filename)
 	if err != nil {
@@ -102,7 +100,7 @@ func (c *Config) LoadFromFile(filename string) error {
 	}
 }
 
-// SaveToFile saves configuration to a YAML or JSON file
+// SaveToFile saves configuration to a YAML or JSON file.
 func (c *Config) SaveToFile(filename string) error {
 	var data []byte
 	var err error
@@ -121,10 +119,10 @@ func (c *Config) SaveToFile(filename string) error {
 		return fmt.Errorf("failed to marshal config: %w", err)
 	}
 
-	return os.WriteFile(filename, data, 0644)
+	return os.WriteFile(filename, data, 0o644)
 }
 
-// ApplyDefaults applies default values to the configuration
+// ApplyDefaults applies default values to the configuration.
 func (c *Config) ApplyDefaults() {
 	// Set default schema
 	if c.Schema == "" {
@@ -173,7 +171,7 @@ func (c *Config) ApplyDefaults() {
 	c.applyAdvancedDefaults()
 }
 
-// applyAdvancedDefaults applies default values for advanced features
+// applyAdvancedDefaults applies default values for advanced features.
 func (c *Config) applyAdvancedDefaults() {
 	// Parallel configuration defaults
 	if c.Parallel.Workers == 0 {
@@ -202,7 +200,7 @@ func (c *Config) applyAdvancedDefaults() {
 	}
 }
 
-// GetModelsDir returns the models output directory
+// GetModelsDir returns the models output directory.
 func (c *Config) GetModelsDir() string {
 	if c.OutputDirs.Models != "" {
 		return c.OutputDirs.Models
@@ -210,7 +208,7 @@ func (c *Config) GetModelsDir() string {
 	return filepath.Join(c.GetBaseDir(), "models")
 }
 
-// GetInterfacesDir returns the interfaces output directory
+// GetInterfacesDir returns the interfaces output directory.
 func (c *Config) GetInterfacesDir() string {
 	if c.OutputDirs.Interfaces != "" {
 		return c.OutputDirs.Interfaces
@@ -218,7 +216,7 @@ func (c *Config) GetInterfacesDir() string {
 	return filepath.Join(c.GetBaseDir(), "repository", "interfaces")
 }
 
-// GetReposDir returns the repository implementations output directory
+// GetReposDir returns the repository implementations output directory.
 func (c *Config) GetReposDir() string {
 	if c.OutputDirs.Repos != "" {
 		return c.OutputDirs.Repos
@@ -226,7 +224,7 @@ func (c *Config) GetReposDir() string {
 	return filepath.Join(c.GetBaseDir(), "repository", "postgres")
 }
 
-// GetMocksDir returns the mocks output directory
+// GetMocksDir returns the mocks output directory.
 func (c *Config) GetMocksDir() string {
 	if c.OutputDirs.Mocks != "" {
 		return c.OutputDirs.Mocks
@@ -234,7 +232,7 @@ func (c *Config) GetMocksDir() string {
 	return filepath.Join(c.GetBaseDir(), "mocks")
 }
 
-// GetTestsDir returns the tests output directory
+// GetTestsDir returns the tests output directory.
 func (c *Config) GetTestsDir() string {
 	if c.OutputDirs.Tests != "" {
 		return c.OutputDirs.Tests
@@ -242,7 +240,7 @@ func (c *Config) GetTestsDir() string {
 	return filepath.Join(c.GetBaseDir(), "tests")
 }
 
-// GetBaseDir returns the base output directory
+// GetBaseDir returns the base output directory.
 func (c *Config) GetBaseDir() string {
 	if c.OutputDirs.Base != "" {
 		return c.OutputDirs.Base
@@ -253,7 +251,7 @@ func (c *Config) GetBaseDir() string {
 	return "./pgx-goose"
 }
 
-// GetAllOutputDirs returns all output directories
+// GetAllOutputDirs returns all output directories.
 func (c *Config) GetAllOutputDirs() []string {
 	dirs := []string{
 		c.GetModelsDir(),
@@ -269,7 +267,7 @@ func (c *Config) GetAllOutputDirs() []string {
 	return dirs
 }
 
-// Validate validates the configuration
+// Validate validates the configuration.
 func (c *Config) Validate() error {
 	if c.DSN == "" {
 		return fmt.Errorf("DSN is required")
@@ -292,7 +290,7 @@ func (c *Config) Validate() error {
 	return nil
 }
 
-// validateAdvancedFeatures validates advanced feature configurations
+// validateAdvancedFeatures validates advanced feature configurations.
 func (c *Config) validateAdvancedFeatures() error {
 	// Validate parallel configuration - only if enabled or workers explicitly set
 	if c.Parallel.Enabled || c.Parallel.Workers > 0 {
@@ -332,7 +330,7 @@ func (c *Config) validateAdvancedFeatures() error {
 	return nil
 }
 
-// GetMigrationsDir returns the migrations output directory
+// GetMigrationsDir returns the migrations output directory.
 func (c *Config) GetMigrationsDir() string {
 	if c.Migrations.OutputDir != "" {
 		return c.Migrations.OutputDir
@@ -340,37 +338,37 @@ func (c *Config) GetMigrationsDir() string {
 	return "./migrations"
 }
 
-// IsParallelEnabled returns true if parallel generation is enabled
+// IsParallelEnabled returns true if parallel generation is enabled.
 func (c *Config) IsParallelEnabled() bool {
 	return c.Parallel.Enabled
 }
 
-// IsIncrementalEnabled returns true if incremental generation is enabled
+// IsIncrementalEnabled returns true if incremental generation is enabled.
 func (c *Config) IsIncrementalEnabled() bool {
 	return c.Incremental.Enabled
 }
 
-// IsCrossSchemaEnabled returns true if cross-schema support is enabled
+// IsCrossSchemaEnabled returns true if cross-schema support is enabled.
 func (c *Config) IsCrossSchemaEnabled() bool {
 	return c.CrossSchema.Enabled
 }
 
-// IsMigrationsEnabled returns true if migration generation is enabled
+// IsMigrationsEnabled returns true if migration generation is enabled.
 func (c *Config) IsMigrationsEnabled() bool {
 	return c.Migrations.Enabled
 }
 
-// IsGoGenerateEnabled returns true if go:generate integration is enabled
+// IsGoGenerateEnabled returns true if go:generate integration is enabled.
 func (c *Config) IsGoGenerateEnabled() bool {
 	return c.GoGenerate.Enabled
 }
 
-// IsTemplateOptimizationEnabled returns true if template optimization is enabled
+// IsTemplateOptimizationEnabled returns true if template optimization is enabled.
 func (c *Config) IsTemplateOptimizationEnabled() bool {
 	return c.TemplateOptimization.Enabled
 }
 
-// ShouldIgnoreTable checks if a table should be ignored
+// ShouldIgnoreTable checks if a table should be ignored.
 func (c *Config) ShouldIgnoreTable(tableName string) bool {
 	for _, ignoredTable := range c.IgnoreTables {
 		if strings.EqualFold(ignoredTable, tableName) {
@@ -380,7 +378,7 @@ func (c *Config) ShouldIgnoreTable(tableName string) bool {
 	return false
 }
 
-// FilterTables filters a list of tables, removing ignored ones
+// FilterTables filters a list of tables, removing ignored ones.
 func (c *Config) FilterTables(tables []string) []string {
 	if len(c.IgnoreTables) == 0 {
 		return tables
@@ -395,7 +393,7 @@ func (c *Config) FilterTables(tables []string) []string {
 	return filtered
 }
 
-// ValidateTableConfiguration validates table and ignore_tables configuration
+// ValidateTableConfiguration validates table and ignore_tables configuration.
 func (c *Config) ValidateTableConfiguration() error {
 	// Check for conflicts between tables and ignore_tables
 	for _, table := range c.Tables {

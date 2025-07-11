@@ -8,26 +8,26 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// Column represents a database column
+// Column represents a database column.
 type Column struct {
+	DefaultValue *string
 	Name         string
 	Type         string
 	GoType       string
-	IsPrimaryKey bool
-	IsNullable   bool
-	DefaultValue *string
 	Comment      string
 	Position     int
+	IsPrimaryKey bool
+	IsNullable   bool
 }
 
-// Index represents a database index
+// Index represents a database index.
 type Index struct {
 	Name     string
 	Columns  []string
 	IsUnique bool
 }
 
-// ForeignKey represents a foreign key relationship
+// ForeignKey represents a foreign key relationship.
 type ForeignKey struct {
 	Name             string
 	Column           string
@@ -35,7 +35,7 @@ type ForeignKey struct {
 	ReferencedColumn string
 }
 
-// Table represents a database table
+// Table represents a database table.
 type Table struct {
 	Name        string
 	Comment     string
@@ -45,18 +45,18 @@ type Table struct {
 	ForeignKeys []ForeignKey
 }
 
-// Schema represents the database schema
+// Schema represents the database schema.
 type Schema struct {
 	Tables []Table
 }
 
-// Introspector handles database schema introspection
+// Introspector handles database schema introspection.
 type Introspector struct {
 	dsn    string
 	schema string
 }
 
-// New creates a new Introspector
+// New creates a new Introspector.
 func New(dsn, schema string) *Introspector {
 	if schema == "" {
 		schema = "public"
@@ -67,7 +67,7 @@ func New(dsn, schema string) *Introspector {
 	}
 }
 
-// IntrospectSchema introspects the database schema
+// IntrospectSchema introspects the database schema.
 func (i *Introspector) IntrospectSchema(tables []string) (*Schema, error) {
 	ctx := context.Background()
 
@@ -105,7 +105,7 @@ func (i *Introspector) IntrospectSchema(tables []string) (*Schema, error) {
 	return schema, nil
 }
 
-// GetAllTables returns all table names in the schema
+// GetAllTables returns all table names in the schema.
 func (i *Introspector) GetAllTables() ([]string, error) {
 	ctx := context.Background()
 
@@ -119,13 +119,13 @@ func (i *Introspector) GetAllTables() ([]string, error) {
 	return i.getAllTables(ctx, pool)
 }
 
-// Close closes the introspector (no-op for current implementation)
+// Close closes the introspector (no-op for current implementation).
 func (i *Introspector) Close() {
 	// Current implementation doesn't maintain persistent connections
 	// This is here to satisfy the interface
 }
 
-// getAllTables returns all table names in the specified schema
+// getAllTables returns all table names in the specified schema.
 func (i *Introspector) getAllTables(ctx context.Context, pool *pgxpool.Pool) ([]string, error) {
 	query := `
 		SELECT table_name 
@@ -153,7 +153,7 @@ func (i *Introspector) getAllTables(ctx context.Context, pool *pgxpool.Pool) ([]
 	return tables, rows.Err()
 }
 
-// introspectTable introspects a single table
+// introspectTable introspects a single table.
 func (i *Introspector) introspectTable(ctx context.Context, pool *pgxpool.Pool, tableName string) (*Table, error) {
 	table := &Table{Name: tableName}
 
@@ -205,7 +205,7 @@ func (i *Introspector) introspectTable(ctx context.Context, pool *pgxpool.Pool, 
 	return table, nil
 }
 
-// getTableComment gets table comment
+// getTableComment gets table comment.
 func (i *Introspector) getTableComment(ctx context.Context, pool *pgxpool.Pool, tableName string) (string, error) {
 	query := `
 		SELECT COALESCE(obj_description(c.oid), '') 
@@ -223,7 +223,7 @@ func (i *Introspector) getTableComment(ctx context.Context, pool *pgxpool.Pool, 
 	return comment, nil
 }
 
-// getColumns gets all columns for a table
+// getColumns gets all columns for a table.
 func (i *Introspector) getColumns(ctx context.Context, pool *pgxpool.Pool, tableName string) ([]Column, error) {
 	query := `
 		SELECT 
@@ -267,7 +267,7 @@ func (i *Introspector) getColumns(ctx context.Context, pool *pgxpool.Pool, table
 	return columns, rows.Err()
 }
 
-// getPrimaryKeys gets primary key columns for a table
+// getPrimaryKeys gets primary key columns for a table.
 func (i *Introspector) getPrimaryKeys(ctx context.Context, pool *pgxpool.Pool, tableName string) ([]string, error) {
 	query := `
 		SELECT a.attname
@@ -297,7 +297,7 @@ func (i *Introspector) getPrimaryKeys(ctx context.Context, pool *pgxpool.Pool, t
 	return primaryKeys, rows.Err()
 }
 
-// getIndexes gets all indexes for a table
+// getIndexes gets all indexes for a table.
 func (i *Introspector) getIndexes(ctx context.Context, pool *pgxpool.Pool, tableName string) ([]Index, error) {
 	query := `
 		SELECT 
@@ -348,7 +348,7 @@ func (i *Introspector) getIndexes(ctx context.Context, pool *pgxpool.Pool, table
 	return indexes, rows.Err()
 }
 
-// getForeignKeys gets all foreign keys for a table
+// getForeignKeys gets all foreign keys for a table.
 func (i *Introspector) getForeignKeys(ctx context.Context, pool *pgxpool.Pool, tableName string) ([]ForeignKey, error) {
 	query := `
 		SELECT 

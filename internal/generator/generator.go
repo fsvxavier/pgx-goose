@@ -15,7 +15,7 @@ import (
 	"github.com/fsvxavier/pgx-goose/internal/introspector"
 )
 
-// Generator handles code generation with dependency injection
+// Generator handles code generation with dependency injection.
 type Generator struct {
 	config            *config.Config
 	logger            interfaces.Logger
@@ -25,7 +25,7 @@ type Generator struct {
 	generationStats   interfaces.GenerationMetrics
 }
 
-// New creates a new Generator with basic configuration
+// New creates a new Generator with basic configuration.
 func New(cfg *config.Config) *Generator {
 	return &Generator{
 		config: cfg,
@@ -35,7 +35,7 @@ func New(cfg *config.Config) *Generator {
 	}
 }
 
-// NewWithDependencies creates a Generator with full dependency injection
+// NewWithDependencies creates a Generator with full dependency injection.
 func NewWithDependencies(
 	cfg *config.Config,
 	logger interfaces.Logger,
@@ -53,7 +53,7 @@ func NewWithDependencies(
 	}
 }
 
-// Generate generates code for the given schema
+// Generate generates code for the given schema.
 func (g *Generator) Generate(ctx context.Context, schema *introspector.Schema, outputPath string) error {
 	start := time.Now()
 
@@ -118,7 +118,7 @@ func (g *Generator) Generate(ctx context.Context, schema *introspector.Schema, o
 	return nil
 }
 
-// generateParallel generates code using parallel workers
+// generateParallel generates code using parallel workers.
 func (g *Generator) generateParallel(ctx context.Context, schema *introspector.Schema) error {
 	workers := g.config.Parallel.Workers
 	if workers <= 0 {
@@ -165,7 +165,7 @@ func (g *Generator) generateParallel(ctx context.Context, schema *introspector.S
 	return nil
 }
 
-// worker is a parallel worker for table processing
+// worker is a parallel worker for table processing.
 func (g *Generator) worker(ctx context.Context, id int, tables <-chan introspector.Table, errors chan<- error, wg *sync.WaitGroup) {
 	defer wg.Done()
 
@@ -211,7 +211,7 @@ func (g *Generator) worker(ctx context.Context, id int, tables <-chan introspect
 	}
 }
 
-// generateSequential generates code sequentially
+// generateSequential generates code sequentially.
 func (g *Generator) generateSequential(ctx context.Context, schema *introspector.Schema) error {
 	if g.logger != nil {
 		g.logger.Info("Using sequential generation")
@@ -240,7 +240,7 @@ func (g *Generator) generateSequential(ctx context.Context, schema *introspector
 	return nil
 }
 
-// generateTableFiles generates all files for a table
+// generateTableFiles generates all files for a table.
 func (g *Generator) generateTableFiles(table introspector.Table) error {
 	// Generate model
 	if err := g.generateModel(table); err != nil {
@@ -267,7 +267,7 @@ func (g *Generator) generateTableFiles(table introspector.Table) error {
 	return nil
 }
 
-// createOutputDirectories creates necessary output directories
+// createOutputDirectories creates necessary output directories.
 func (g *Generator) createOutputDirectories() error {
 	baseDir := g.config.OutputDir
 	if baseDir == "" {
@@ -284,7 +284,7 @@ func (g *Generator) createOutputDirectories() error {
 	}
 
 	for _, dir := range dirs {
-		if err := os.MkdirAll(dir, 0755); err != nil {
+		if err := os.MkdirAll(dir, 0o755); err != nil {
 			return fmt.Errorf("failed to create directory %s: %w", dir, err)
 		}
 	}
@@ -292,7 +292,7 @@ func (g *Generator) createOutputDirectories() error {
 	return nil
 }
 
-// generateModel generates the model file for a table
+// generateModel generates the model file for a table.
 func (g *Generator) generateModel(table introspector.Table) error {
 	template := g.getModelTemplate()
 	data := map[string]interface{}{
@@ -307,10 +307,10 @@ func (g *Generator) generateModel(table introspector.Table) error {
 	}
 
 	filename := filepath.Join(g.config.OutputDir, "models", strings.ToLower(table.Name)+".go")
-	return os.WriteFile(filename, []byte(content), 0644)
+	return os.WriteFile(filename, []byte(content), 0o644)
 }
 
-// generateRepositoryInterface generates the repository interface
+// generateRepositoryInterface generates the repository interface.
 func (g *Generator) generateRepositoryInterface(table introspector.Table) error {
 	template := g.getRepositoryInterfaceTemplate()
 	data := map[string]interface{}{
@@ -325,10 +325,10 @@ func (g *Generator) generateRepositoryInterface(table introspector.Table) error 
 	}
 
 	filename := filepath.Join(g.config.OutputDir, "interfaces", strings.ToLower(table.Name)+"_repository.go")
-	return os.WriteFile(filename, []byte(content), 0644)
+	return os.WriteFile(filename, []byte(content), 0o644)
 }
 
-// generateRepository generates the repository implementation
+// generateRepository generates the repository implementation.
 func (g *Generator) generateRepository(table introspector.Table) error {
 	template := g.getRepositoryTemplate()
 	data := map[string]interface{}{
@@ -343,10 +343,10 @@ func (g *Generator) generateRepository(table introspector.Table) error {
 	}
 
 	filename := filepath.Join(g.config.OutputDir, "repositories", strings.ToLower(table.Name)+"_repository.go")
-	return os.WriteFile(filename, []byte(content), 0644)
+	return os.WriteFile(filename, []byte(content), 0o644)
 }
 
-// generateTests generates test files
+// generateTests generates test files.
 func (g *Generator) generateTests(table introspector.Table) error {
 	template := g.getTestTemplate()
 	data := map[string]interface{}{
@@ -361,10 +361,10 @@ func (g *Generator) generateTests(table introspector.Table) error {
 	}
 
 	filename := filepath.Join(g.config.OutputDir, "tests", strings.ToLower(table.Name)+"_test.go")
-	return os.WriteFile(filename, []byte(content), 0644)
+	return os.WriteFile(filename, []byte(content), 0o644)
 }
 
-// executeTemplate executes a template with the given data
+// executeTemplate executes a template with the given data.
 func (g *Generator) executeTemplate(templateStr string, data interface{}) (string, error) {
 	funcMap := template.FuncMap{
 		"toPascalCase": toPascalCase,
@@ -387,12 +387,12 @@ func (g *Generator) executeTemplate(templateStr string, data interface{}) (strin
 	return buf.String(), nil
 }
 
-// SetTemplateOptimizer sets the template optimizer
+// SetTemplateOptimizer sets the template optimizer.
 func (g *Generator) SetTemplateOptimizer(optimizer interfaces.TemplateOptimizer) {
 	g.templateOptimizer = optimizer
 }
 
-// GetMetrics returns current generation metrics
+// GetMetrics returns current generation metrics.
 func (g *Generator) GetMetrics() interfaces.GenerationMetrics {
 	g.mu.RLock()
 	defer g.mu.RUnlock()
@@ -406,7 +406,7 @@ func (g *Generator) GetMetrics() interfaces.GenerationMetrics {
 	return g.generationStats
 }
 
-// getGenerationMode returns the current generation mode
+// getGenerationMode returns the current generation mode.
 func (g *Generator) getGenerationMode() string {
 	if g.config.Parallel.Enabled {
 		return "parallel"
@@ -414,7 +414,7 @@ func (g *Generator) getGenerationMode() string {
 	return "sequential"
 }
 
-// getModelTemplate returns the model template
+// getModelTemplate returns the model template.
 func (g *Generator) getModelTemplate() string {
 	return `package {{.Package}}
 
@@ -436,7 +436,7 @@ func ({{.TableName}}) TableName() string {
 `
 }
 
-// getRepositoryInterfaceTemplate returns the repository interface template
+// getRepositoryInterfaceTemplate returns the repository interface template.
 func (g *Generator) getRepositoryInterfaceTemplate() string {
 	return `package {{.Package}}
 
@@ -455,7 +455,7 @@ type {{.TableName}}Repository interface {
 `
 }
 
-// getRepositoryTemplate returns the repository implementation template
+// getRepositoryTemplate returns the repository implementation template.
 func (g *Generator) getRepositoryTemplate() string {
 	return `package {{.Package}}
 
@@ -501,7 +501,7 @@ func (r *{{.TableName}}Repository) List(ctx context.Context, limit, offset int) 
 `
 }
 
-// getTestTemplate returns the test template
+// getTestTemplate returns the test template.
 func (g *Generator) getTestTemplate() string {
 	return `package {{.Package}}
 
@@ -534,7 +534,7 @@ func Test{{.TableName}}Repository_List(t *testing.T) {
 `
 }
 
-// toPascalCase converts a string to PascalCase
+// toPascalCase converts a string to PascalCase.
 func toPascalCase(s string) string {
 	parts := strings.Split(s, "_")
 	result := ""

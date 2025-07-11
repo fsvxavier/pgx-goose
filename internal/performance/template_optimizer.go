@@ -11,25 +11,25 @@ import (
 	"github.com/fsvxavier/pgx-goose/internal/interfaces"
 )
 
-// TemplateOptimizerImpl implements interfaces.TemplateOptimizer
+// TemplateOptimizerImpl implements interfaces.TemplateOptimizer.
 type TemplateOptimizerImpl struct {
 	cache   map[string]*CachedTemplate
-	mu      sync.RWMutex
-	maxSize int
 	stats   *CacheStatsImpl
 	funcMap template.FuncMap
+	maxSize int
+	mu      sync.RWMutex
 }
 
-// CachedTemplate wraps a compiled template with metadata
+// CachedTemplate wraps a compiled template with metadata.
 type CachedTemplate struct {
-	template   *template.Template
-	content    string
 	compiledAt time.Time
 	lastUsed   time.Time
+	template   *template.Template
+	content    string
 	useCount   int64
 }
 
-// CacheStatsImpl implements interfaces.CacheStats
+// CacheStatsImpl implements interfaces.CacheStats.
 type CacheStatsImpl struct {
 	mu        sync.RWMutex
 	hits      int64
@@ -39,13 +39,13 @@ type CacheStatsImpl struct {
 	maxSize   int
 }
 
-// CompiledTemplateImpl implements interfaces.CompiledTemplate
+// CompiledTemplateImpl implements interfaces.CompiledTemplate.
 type CompiledTemplateImpl struct {
 	template *template.Template
 	name     string
 }
 
-// NewTemplateOptimizer creates a new template optimizer with caching
+// NewTemplateOptimizer creates a new template optimizer with caching.
 func NewTemplateOptimizer(maxSize int, funcMap template.FuncMap) interfaces.TemplateOptimizer {
 	if funcMap == nil {
 		funcMap = getDefaultFuncMap()
@@ -180,7 +180,7 @@ func (t *TemplateOptimizerImpl) evictLRU() {
 	}
 }
 
-// CompiledTemplateImpl methods
+// CompiledTemplateImpl methods.
 func (c *CompiledTemplateImpl) Execute(data interface{}) ([]byte, error) {
 	var buf bytes.Buffer
 	if err := c.template.Execute(&buf, data); err != nil {
@@ -193,7 +193,7 @@ func (c *CompiledTemplateImpl) Name() string {
 	return c.name
 }
 
-// CacheStatsImpl methods
+// CacheStatsImpl methods.
 func (c *CacheStatsImpl) recordHit() {
 	c.mu.Lock()
 	defer c.mu.Unlock()
@@ -253,7 +253,7 @@ func (c *CacheStatsImpl) GetHitRatio() float64 {
 	return float64(c.hits) / float64(total)
 }
 
-// getDefaultFuncMap returns the default template functions
+// getDefaultFuncMap returns the default template functions.
 func getDefaultFuncMap() template.FuncMap {
 	return template.FuncMap{
 		"toPascalCase": toPascalCase,
@@ -286,7 +286,7 @@ func getDefaultFuncMap() template.FuncMap {
 	}
 }
 
-// Utility functions
+// Utility functions.
 func toPascalCase(s string) string {
 	// Simple implementation - should be improved for production
 	return s

@@ -8,21 +8,21 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-// ServiceConfig contains configuration for the introspector service
+// ServiceConfig contains configuration for the introspector service.
 type ServiceConfig struct {
 	Pool   *pgxpool.Pool
-	Schema string
 	Logger *slog.Logger
+	Schema string
 }
 
-// IntrospectorService implements enhanced introspection with observability
+// IntrospectorService implements enhanced introspection with observability.
 type IntrospectorService struct {
 	pool   *pgxpool.Pool
-	schema string
 	logger *slog.Logger
+	schema string
 }
 
-// NewIntrospectorService creates a new introspector service with dependency injection
+// NewIntrospectorService creates a new introspector service with dependency injection.
 func NewIntrospectorService(config ServiceConfig) *IntrospectorService {
 	if config.Schema == "" {
 		config.Schema = "public"
@@ -343,7 +343,7 @@ func (i *IntrospectorService) Close() error {
 	return nil
 }
 
-// mapPostgresToGoType maps PostgreSQL data types to Go types
+// mapPostgresToGoType maps PostgreSQL data types to Go types.
 func mapPostgresToGoType(postgresType string, isNullable bool) string {
 	var goType string
 

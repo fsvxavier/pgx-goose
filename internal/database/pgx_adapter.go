@@ -4,18 +4,17 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/fsvxavier/pgx-goose/internal/interfaces"
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
-
-	"github.com/fsvxavier/pgx-goose/internal/interfaces"
 )
 
-// PgxPoolAdapter adapts pgxpool.Pool to our DatabasePool interface
+// PgxPoolAdapter adapts pgxpool.Pool to our DatabasePool interface.
 type PgxPoolAdapter struct {
 	pool poolInterface
 }
 
-// poolInterface allows for testing with mocks
+// poolInterface allows for testing with mocks.
 type poolInterface interface {
 	Ping(ctx context.Context) error
 	Query(ctx context.Context, sql string, args ...interface{}) (pgx.Rows, error)
@@ -24,7 +23,7 @@ type poolInterface interface {
 	Stat() *pgxpool.Stat
 }
 
-// NewPgxPoolAdapter creates a new PGX pool adapter
+// NewPgxPoolAdapter creates a new PGX pool adapter.
 func NewPgxPoolAdapter(ctx context.Context, dsn string) (interfaces.DatabasePool, error) {
 	config, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
@@ -81,12 +80,12 @@ func (p *PgxPoolAdapter) Stats() interfaces.PoolStats {
 	}
 }
 
-// pgxPoolWrapper wraps *pgxpool.Pool to implement poolInterface
+// pgxPoolWrapper wraps *pgxpool.Pool to implement poolInterface.
 type pgxPoolWrapper struct {
 	*pgxpool.Pool
 }
 
-// PgxRowsAdapter adapts pgx.Rows to our QueryResult interface
+// PgxRowsAdapter adapts pgx.Rows to our QueryResult interface.
 type PgxRowsAdapter struct {
 	rows pgx.Rows
 }
@@ -107,7 +106,7 @@ func (r *PgxRowsAdapter) Err() error {
 	return r.rows.Err()
 }
 
-// PgxRowAdapter adapts pgx.Row to our Row interface
+// PgxRowAdapter adapts pgx.Row to our Row interface.
 type PgxRowAdapter struct {
 	row pgx.Row
 }

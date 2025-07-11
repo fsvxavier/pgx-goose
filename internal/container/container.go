@@ -16,7 +16,7 @@ import (
 	"github.com/fsvxavier/pgx-goose/internal/performance"
 )
 
-// Container holds all application dependencies
+// Container holds all application dependencies.
 type Container struct {
 	config            *config.Config
 	logger            interfaces.Logger
@@ -27,7 +27,7 @@ type Container struct {
 	generator         interfaces.CodeGenerator
 }
 
-// NewContainer creates a new dependency container
+// NewContainer creates a new dependency container.
 func NewContainer(cfg *config.Config) (*Container, error) {
 	container := &Container{
 		config: cfg,
@@ -40,7 +40,7 @@ func NewContainer(cfg *config.Config) (*Container, error) {
 	return container, nil
 }
 
-// initializeServices initializes all services with proper dependency injection
+// initializeServices initializes all services with proper dependency injection.
 func (c *Container) initializeServices() error {
 	var err error
 
@@ -99,7 +99,7 @@ func (c *Container) initializeServices() error {
 	return nil
 }
 
-// generatorAdapter adapts *generator.Generator to interfaces.CodeGenerator
+// generatorAdapter adapts *generator.Generator to interfaces.CodeGenerator.
 type generatorAdapter struct {
 	generator *generator.Generator
 }
@@ -121,7 +121,7 @@ func (g *generatorAdapter) GetMetrics() interfaces.GenerationMetrics {
 	}
 }
 
-// introspectorAdapter adapts *introspector.Introspector to interfaces.SchemaIntrospector
+// introspectorAdapter adapts *introspector.Introspector to interfaces.SchemaIntrospector.
 type introspectorAdapter struct {
 	introspector *introspector.Introspector
 }
@@ -139,11 +139,11 @@ func (i *introspectorAdapter) Close() error {
 	return nil
 }
 
-// enhancedMetricsCollector provides enhanced metrics implementation
+// enhancedMetricsCollector provides enhanced metrics implementation.
 type enhancedMetricsCollector struct {
-	mu        sync.RWMutex
-	metrics   map[string]interface{}
 	startTime time.Time
+	metrics   map[string]interface{}
+	mu        sync.RWMutex
 }
 
 func (e *enhancedMetricsCollector) IncrementCounter(name string, labels map[string]string) {
@@ -219,7 +219,7 @@ func (e *enhancedMetricsCollector) GetMetrics() map[string]interface{} {
 	return result
 }
 
-// retryDatabaseConnection attempts to connect to the database with retries
+// retryDatabaseConnection attempts to connect to the database with retries.
 func (c *Container) retryDatabaseConnection(ctx context.Context) error {
 	maxRetries := 3
 	retryDelay := time.Second * 2
@@ -246,10 +246,10 @@ func (c *Container) retryDatabaseConnection(ctx context.Context) error {
 	return fmt.Errorf("failed to connect to database after %d attempts", maxRetries)
 }
 
-// simpleMetricsCollector provides a basic metrics implementation
+// simpleMetricsCollector provides a basic metrics implementation.
 type simpleMetricsCollector struct {
-	mu      sync.RWMutex
 	metrics map[string]interface{}
+	mu      sync.RWMutex
 }
 
 func (s *simpleMetricsCollector) IncrementCounter(name string, labels map[string]string) {
@@ -295,42 +295,42 @@ func (s *simpleMetricsCollector) GetMetrics() map[string]interface{} {
 	return result
 }
 
-// GetConfig returns the configuration
+// GetConfig returns the configuration.
 func (c *Container) GetConfig() *config.Config {
 	return c.config
 }
 
-// GetLogger returns the logger
+// GetLogger returns the logger.
 func (c *Container) GetLogger() interfaces.Logger {
 	return c.logger
 }
 
-// GetMetrics returns the metrics collector
+// GetMetrics returns the metrics collector.
 func (c *Container) GetMetrics() interfaces.MetricsCollector {
 	return c.metrics
 }
 
-// GetDatabasePool returns the database pool
+// GetDatabasePool returns the database pool.
 func (c *Container) GetDatabasePool() interfaces.DatabasePool {
 	return c.dbPool
 }
 
-// GetIntrospector returns the schema introspector
+// GetIntrospector returns the schema introspector.
 func (c *Container) GetIntrospector() interfaces.SchemaIntrospector {
 	return c.introspector
 }
 
-// GetTemplateOptimizer returns the template optimizer
+// GetTemplateOptimizer returns the template optimizer.
 func (c *Container) GetTemplateOptimizer() interfaces.TemplateOptimizer {
 	return c.templateOptimizer
 }
 
-// GetGenerator returns the code generator
+// GetGenerator returns the code generator.
 func (c *Container) GetGenerator() interfaces.CodeGenerator {
 	return c.generator
 }
 
-// Close closes all resources
+// Close closes all resources.
 func (c *Container) Close() error {
 	var errs []error
 
@@ -355,7 +355,7 @@ func (c *Container) Close() error {
 	return nil
 }
 
-// Health checks the health of all services
+// Health checks the health of all services.
 func (c *Container) Health(ctx context.Context) error {
 	// Check database connection
 	if c.dbPool == nil {

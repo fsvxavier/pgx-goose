@@ -6,18 +6,17 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/spf13/cobra"
-
 	"github.com/fsvxavier/pgx-goose/internal/config"
 	"github.com/fsvxavier/pgx-goose/internal/generator"
 	"github.com/fsvxavier/pgx-goose/internal/introspector"
+	"github.com/spf13/cobra"
 )
 
 var (
 	dsn       string
 	schema    string
 	outputDir string
-	// New individual output directory flags
+	// New individual output directory flags.
 	modelsDir     string
 	interfacesDir string
 	reposDir      string
@@ -33,7 +32,7 @@ var (
 	verbose       bool
 	debug         bool
 
-	// New flags for advanced features
+	// New flags for advanced features.
 	parallel           bool
 	workers            int
 	incremental        bool
@@ -124,7 +123,7 @@ func runGenerate(cmd *cobra.Command, args []string) error {
 	return handleRegularGeneration(cfg)
 }
 
-// handleGoGenerateIntegration handles go:generate integration setup
+// handleGoGenerateIntegration handles go:generate integration setup.
 func handleGoGenerateIntegration(cfg *config.Config) error {
 	slog.Info("Setting up go:generate integration")
 
@@ -132,7 +131,7 @@ func handleGoGenerateIntegration(cfg *config.Config) error {
 	return handleRegularGeneration(cfg)
 }
 
-// handleMigrationGeneration handles database migration generation
+// handleMigrationGeneration handles database migration generation.
 func handleMigrationGeneration(cfg *config.Config) error {
 	slog.Info("Generating database migrations")
 
@@ -140,13 +139,13 @@ func handleMigrationGeneration(cfg *config.Config) error {
 	return fmt.Errorf("migration generation requires comparison between two schemas - not fully implemented yet")
 }
 
-// handleCrossSchemaGeneration handles cross-schema code generation
+// handleCrossSchemaGeneration handles cross-schema code generation.
 func handleCrossSchemaGeneration(cfg *config.Config) error {
 	slog.Info("Cross-schema generation not fully implemented yet")
 	return fmt.Errorf("cross-schema generation requires multi-schema configuration - not fully implemented yet")
 }
 
-// handleRegularGeneration handles regular code generation with optimizations
+// handleRegularGeneration handles regular code generation with optimizations.
 func handleRegularGeneration(cfg *config.Config) error {
 	// Create introspector
 	inspector := introspector.New(cfg.DSN, cfg.Schema)
@@ -200,7 +199,7 @@ func handleRegularGeneration(cfg *config.Config) error {
 	}
 }
 
-// runIncrementalGeneration runs incremental code generation
+// runIncrementalGeneration runs incremental code generation.
 func runIncrementalGeneration(cfg *config.Config, schema *introspector.Schema) error {
 	slog.Info("Using incremental generation")
 
@@ -208,7 +207,7 @@ func runIncrementalGeneration(cfg *config.Config, schema *introspector.Schema) e
 	return runStandardGeneration(cfg, schema)
 }
 
-// runParallelGeneration runs parallel code generation
+// runParallelGeneration runs parallel code generation.
 func runParallelGeneration(cfg *config.Config, schema *introspector.Schema) error {
 	slog.Info("Using parallel generation", "workers", workers)
 
@@ -219,7 +218,7 @@ func runParallelGeneration(cfg *config.Config, schema *introspector.Schema) erro
 	return runStandardGeneration(cfg, schema)
 }
 
-// runStandardGeneration runs standard code generation with optional optimizations
+// runStandardGeneration runs standard code generation with optional optimizations.
 func runStandardGeneration(cfg *config.Config, schema *introspector.Schema) error {
 	slog.Info("Using standard generation")
 
@@ -331,7 +330,7 @@ func loadConfig() (*config.Config, error) {
 	return cfg, nil
 }
 
-// findDefaultConfigFile searches for default configuration files in the current directory
+// findDefaultConfigFile searches for default configuration files in the current directory.
 func findDefaultConfigFile() string {
 	// List of default config file names to search for (in order of preference)
 	defaultFiles := []string{

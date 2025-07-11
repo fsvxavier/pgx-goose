@@ -10,13 +10,13 @@ import (
 	"github.com/fsvxavier/pgx-goose/internal/interfaces"
 )
 
-// StructuredLogger implements interfaces.Logger with slog
+// StructuredLogger implements interfaces.Logger with slog.
 type StructuredLogger struct {
 	logger *slog.Logger
 	attrs  []slog.Attr
 }
 
-// NewStructuredLogger creates a new structured logger
+// NewStructuredLogger creates a new structured logger.
 func NewStructuredLogger(level slog.Level, component string) interfaces.Logger {
 	opts := &slog.HandlerOptions{
 		Level: level,
@@ -68,14 +68,14 @@ func (l *StructuredLogger) With(key string, value interface{}) interfaces.Logger
 	}
 }
 
-// MetricsCollector implements interfaces.MetricsCollector
+// MetricsCollector implements interfaces.MetricsCollector.
 type MetricsCollector struct {
-	mu      sync.RWMutex
-	metrics map[string]interface{}
 	logger  interfaces.Logger
+	metrics map[string]interface{}
+	mu      sync.RWMutex
 }
 
-// NewMetricsCollector creates a new metrics collector
+// NewMetricsCollector creates a new metrics collector.
 func NewMetricsCollector(logger interfaces.Logger) interfaces.MetricsCollector {
 	return &MetricsCollector{
 		metrics: make(map[string]interface{}),
@@ -147,13 +147,13 @@ func (m *MetricsCollector) buildKey(name string, labels map[string]string) strin
 	return key
 }
 
-// Observer combines logger and metrics for comprehensive observability
+// Observer combines logger and metrics for comprehensive observability.
 type Observer struct {
 	Logger  interfaces.Logger
 	Metrics interfaces.MetricsCollector
 }
 
-// NewObserver creates a new observer with logger and metrics
+// NewObserver creates a new observer with logger and metrics.
 func NewObserver(component string, logLevel slog.Level) *Observer {
 	logger := NewStructuredLogger(logLevel, component)
 	metrics := NewMetricsCollector(logger)
@@ -164,7 +164,7 @@ func NewObserver(component string, logLevel slog.Level) *Observer {
 	}
 }
 
-// TimedOperation measures operation duration and logs it
+// TimedOperation measures operation duration and logs it.
 func (o *Observer) TimedOperation(name string, labels map[string]string, operation func() error) error {
 	start := time.Now()
 

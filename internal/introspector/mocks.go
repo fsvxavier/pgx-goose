@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 )
 
-// MockPoolAdapter implements a mock for database connection pool
+// MockPoolAdapter implements a mock for database connection pool.
 type MockPoolAdapter struct {
 	pingErr                   error
 	queryErr                  error
@@ -50,11 +50,11 @@ func (m *MockPoolAdapter) Close() {
 	m.closed = true
 }
 
-// MockRowsResult implements pgx.Rows interface for testing
+// MockRowsResult implements pgx.Rows interface for testing.
 type MockRowsResult struct {
+	err        error
 	rows       [][]interface{}
 	currentRow int
-	err        error
 }
 
 func (m *MockRowsResult) Next() bool {
@@ -133,7 +133,7 @@ func (m *MockRowsResult) Conn() *pgx.Conn {
 	return nil // Mock doesn't need real connection
 }
 
-// MockRowResult implements pgx.Row interface for testing
+// MockRowResult implements pgx.Row interface for testing.
 type MockRowResult struct {
 	value interface{}
 	err   error
@@ -166,7 +166,7 @@ func (m *MockRowResult) Scan(dest ...interface{}) error {
 
 // Additional mock implementations for better interface compliance
 
-// MockIntrospectorInterface implements a mock introspector for testing
+// MockIntrospectorInterface implements a mock introspector for testing.
 type MockIntrospectorInterface struct {
 	schema *Schema
 	err    error

@@ -9,28 +9,28 @@ import (
 
 //go:generate mockgen -source=interfaces.go -destination=../mocks/interfaces_mock.go -package=mocks
 
-// ConfigLoader abstracts configuration loading
+// ConfigLoader abstracts configuration loading.
 type ConfigLoader interface {
 	LoadFromFile(filePath string) (*config.Config, error)
 	Validate() error
 	ApplyDefaults()
 }
 
-// SchemaIntrospector abstracts database schema introspection
+// SchemaIntrospector abstracts database schema introspection.
 type SchemaIntrospector interface {
 	IntrospectSchema(ctx context.Context, tables []string) (*introspector.Schema, error)
 	GetAllTables(ctx context.Context) ([]string, error)
 	Close() error
 }
 
-// CodeGenerator abstracts code generation
+// CodeGenerator abstracts code generation.
 type CodeGenerator interface {
 	Generate(ctx context.Context, schema *introspector.Schema, outputPath string) error
 	SetTemplateOptimizer(optimizer TemplateOptimizer)
 	GetMetrics() GenerationMetrics
 }
 
-// TemplateOptimizer abstracts template compilation and caching
+// TemplateOptimizer abstracts template compilation and caching.
 type TemplateOptimizer interface {
 	GetTemplate(name, content string) (CompiledTemplate, error)
 	ExecuteTemplate(template CompiledTemplate, data interface{}) ([]byte, error)
@@ -39,13 +39,13 @@ type TemplateOptimizer interface {
 	GetCacheStats() CacheStats
 }
 
-// CompiledTemplate represents a compiled template
+// CompiledTemplate represents a compiled template.
 type CompiledTemplate interface {
 	Execute(data interface{}) ([]byte, error)
 	Name() string
 }
 
-// Logger abstracts structured logging
+// Logger abstracts structured logging.
 type Logger interface {
 	Info(msg string, args ...interface{})
 	Error(msg string, args ...interface{})
@@ -54,7 +54,7 @@ type Logger interface {
 	With(key string, value interface{}) Logger
 }
 
-// MetricsCollector abstracts metrics collection
+// MetricsCollector abstracts metrics collection.
 type MetricsCollector interface {
 	IncrementCounter(name string, labels map[string]string)
 	RecordDuration(name string, duration float64, labels map[string]string)
@@ -62,7 +62,7 @@ type MetricsCollector interface {
 	GetMetrics() map[string]interface{}
 }
 
-// GenerationMetrics contains generation statistics
+// GenerationMetrics contains generation statistics.
 type GenerationMetrics struct {
 	TablesProcessed   int
 	FilesGenerated    int
@@ -73,7 +73,7 @@ type GenerationMetrics struct {
 	TemplatesCompiled int
 }
 
-// CacheStats contains template cache statistics
+// CacheStats contains template cache statistics.
 type CacheStats struct {
 	Hits      int64
 	Misses    int64
@@ -83,7 +83,7 @@ type CacheStats struct {
 	HitRatio  float64
 }
 
-// DatabasePool abstracts database connection pooling
+// DatabasePool abstracts database connection pooling.
 type DatabasePool interface {
 	Ping(ctx context.Context) error
 	Query(ctx context.Context, sql string, args ...interface{}) (QueryResult, error)
@@ -92,7 +92,7 @@ type DatabasePool interface {
 	Stats() PoolStats
 }
 
-// QueryResult abstracts database query results
+// QueryResult abstracts database query results.
 type QueryResult interface {
 	Next() bool
 	Scan(dest ...interface{}) error
@@ -100,19 +100,19 @@ type QueryResult interface {
 	Err() error
 }
 
-// Row abstracts single row results
+// Row abstracts single row results.
 type Row interface {
 	Scan(dest ...interface{}) error
 }
 
-// PoolStats contains connection pool statistics
+// PoolStats contains connection pool statistics.
 type PoolStats struct {
 	AcquireCount         int64
 	AcquireDuration      float64
-	AcquiredConns        int32
 	CanceledAcquireCount int64
-	ConstructingConns    int32
 	EmptyAcquireCount    int64
+	AcquiredConns        int32
+	ConstructingConns    int32
 	IdleConns            int32
 	MaxConns             int32
 	TotalConns           int32

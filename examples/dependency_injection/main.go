@@ -150,7 +150,7 @@ func demonstrateWithContainer(c *container.Container) {
 	fmt.Println("🚀 Container demonstration completed!")
 }
 
-// Example of testing with dependency injection
+// Example of testing with dependency injection.
 func ExampleTestWithContainer() {
 	// This example shows how the container makes testing easier
 
